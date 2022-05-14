@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  API_URL: 'https://rxpy.pythonanywhere.com'
+  apiUrl: 'https://rxpy.pythonanywhere.com'
 };
