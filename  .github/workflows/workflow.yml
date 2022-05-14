@@ -3,8 +3,7 @@ name: RX CI
 
 on:
   push:
-    branches:
-      - "master"
+    branches: [ master ]
 
 jobs:
   build:
