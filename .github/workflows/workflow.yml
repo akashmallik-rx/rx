@@ -25,10 +25,10 @@ jobs:
           cache: 'npm'
 
       - name: Install and Build
-        working-directory: ./
         run: npm install && npm run gh-build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
+        folder: ./
         with:
           branch: build
