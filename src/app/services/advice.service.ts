@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Advice } from '../models/advice';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +12,24 @@ export class AdviceService {
 
   constructor(private http: HttpClient) { }
 
-  getAll() {
-    return this.http.get(this.baseUrl);
+  getAll(): Observable<Advice[]> {
+    return this.http.get<Advice[]>(this.baseUrl);
   }
 
-  get(id: number) {
-    return this.http.get(`${this.baseUrl}/${id}` + '/');
+  get(id: number): Observable<Advice> {
+    return this.http.get<Advice>(`${this.baseUrl}/${id}` + '/');
   }
 
-  create(payload: any) {
-    return this.http.post(this.baseUrl, payload);
+  create(payload: any): Observable<Advice> {
+    return this.http.post<Advice>(this.baseUrl, payload);
   }
 
-  update(id: number, payload: any) {
-    return this.http.put(`${this.baseUrl}/${id}`, payload);
+  update(id: number, payload: any): Observable<Advice> {
+    return this.http.put<Advice>(`${this.baseUrl}/${id}`, payload);
   }
 
-  partialUpdate(id: number, payload: any) {
-    return this.http.patch(`${this.baseUrl}/${id}`, payload);
+  partialUpdate(id: number, payload: any): Observable<Advice> {
+    return this.http.patch<Advice>(`${this.baseUrl}/${id}`, payload);
   }
 
   delete(id: number) {

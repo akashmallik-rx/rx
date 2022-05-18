@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { MedicinePower } from '../models/medicine-power';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +12,24 @@ export class MedicinePowerService {
 
   constructor(private http: HttpClient) { }
 
-  getAll() {
-    return this.http.get(this.baseUrl);
+  getAll(): Observable<MedicinePower[]> {
+    return this.http.get<MedicinePower[]>(this.baseUrl);
   }
 
-  get(id: number) {
-    return this.http.get(`${this.baseUrl}/${id}` + '/');
+  get(id: number): Observable<MedicinePower> {
+    return this.http.get<MedicinePower>(`${this.baseUrl}/${id}` + '/');
   }
 
-  create(payload: any) {
-    return this.http.post(this.baseUrl, payload);
+  create(payload: any): Observable<MedicinePower> {
+    return this.http.post<MedicinePower>(this.baseUrl, payload);
   }
 
-  update(id: number, payload: any) {
-    return this.http.put(`${this.baseUrl}/${id}`, payload);
+  update(id: number, payload: any): Observable<MedicinePower> {
+    return this.http.put<MedicinePower>(`${this.baseUrl}/${id}`, payload);
   }
 
-  partialUpdate(id: number, payload: any) {
-    return this.http.patch(`${this.baseUrl}/${id}`, payload);
+  partialUpdate(id: number, payload: any): Observable<MedicinePower> {
+    return this.http.patch<MedicinePower>(`${this.baseUrl}/${id}`, payload);
   }
 
   delete(id: number) {
