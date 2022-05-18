@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Examination } from '../models/examination';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +12,24 @@ export class ExaminationService {
 
   constructor(private http: HttpClient) { }
 
-  getAll() {
-    return this.http.get(this.baseUrl);
+  getAll(): Observable<Examination[]> {
+    return this.http.get<Examination[]>(this.baseUrl);
   }
 
-  get(id: number) {
-    return this.http.get(`${this.baseUrl}/${id}` + '/');
+  get(id: number): Observable<Examination> {
+    return this.http.get<Examination>(`${this.baseUrl}/${id}` + '/');
   }
 
-  create(payload: any) {
-    return this.http.post(this.baseUrl, payload);
+  create(payload: any): Observable<Examination> {
+    return this.http.post<Examination>(this.baseUrl, payload);
   }
 
-  update(id: number, payload: any) {
-    return this.http.put(`${this.baseUrl}/${id}`, payload);
+  update(id: number, payload: any): Observable<Examination> {
+    return this.http.put<Examination>(`${this.baseUrl}/${id}`, payload);
   }
 
-  partialUpdate(id: number, payload: any) {
-    return this.http.patch(`${this.baseUrl}/${id}`, payload);
+  partialUpdate(id: number, payload: any): Observable<Examination> {
+    return this.http.patch<Examination>(`${this.baseUrl}/${id}`, payload);
   }
 
   delete(id: number) {

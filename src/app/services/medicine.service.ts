@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Medicine } from '../models/medicine';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +12,24 @@ export class MedicineService {
 
   constructor(private http: HttpClient) { }
 
-  getAll() {
-    return this.http.get(this.baseUrl);
+  getAll(): Observable<Medicine[]> {
+    return this.http.get<Medicine[]>(this.baseUrl);
   }
 
-  get(id: number) {
-    return this.http.get(`${this.baseUrl}/${id}` + '/');
+  get(id: number): Observable<Medicine> {
+    return this.http.get<Medicine>(`${this.baseUrl}/${id}` + '/');
   }
 
-  create(payload: any) {
-    return this.http.post(this.baseUrl, payload);
+  create(payload: any): Observable<Medicine> {
+    return this.http.post<Medicine>(this.baseUrl, payload);
   }
 
-  update(id: number, payload: any) {
-    return this.http.put(`${this.baseUrl}/${id}`, payload);
+  update(id: number, payload: any): Observable<Medicine> {
+    return this.http.put<Medicine>(`${this.baseUrl}/${id}`, payload);
   }
 
-  partialUpdate(id: number, payload: any) {
-    return this.http.patch(`${this.baseUrl}/${id}`, payload);
+  partialUpdate(id: number, payload: any): Observable<Medicine> {
+    return this.http.patch<Medicine>(`${this.baseUrl}/${id}`, payload);
   }
 
   delete(id: number) {
