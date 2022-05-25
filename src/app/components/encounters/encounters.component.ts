@@ -26,12 +26,15 @@ import { SymptomService } from 'src/app/services/symptom.service';
 export class EncountersComponent implements OnInit {
   encounterId!: number;
   patientId!: number;
-  patient$: Patient = <Patient>{};
+  patient: Patient = <Patient>{};
+  selectedEncounter: Encounter = <Encounter>{};
   encounters: Encounter[] = [];
   selectedSymptom: Symptom = <Symptom>{};
   symptoms: Symptom[] = [];
   examination: Examination = <Examination>{};
+  selctedDrug: Drug = <Drug>{};
   drugs: Drug[] = [];
+  selectedAdvice: Advice = <Advice>{};
   advices: Advice[] = [];
   medicines: Medicine[] = [];
   powers: MedicinePower[] = [];
@@ -57,7 +60,7 @@ export class EncountersComponent implements OnInit {
     .subscribe({
       next: (response) => {
         console.log(response);
-        this.patient$ = response;
+        this.patient = response;
         this.encounters = response['encounters'];
       }
     });
@@ -66,13 +69,13 @@ export class EncountersComponent implements OnInit {
     .subscribe({
       next: (response) => {
         console.log(response);
+        this.selectedEncounter = response;
         this.symptoms = response["symptoms"]
         const examination = response["examination"];
         if (examination) {
           this.examination = examination;
         } else {
-          // this.examination = new ExaminationData();
-          this.examination;
+          this.examination = <Examination>{};
         }
         this.drugs = response["drugs"];
         this.advices = response["advices"];
@@ -143,7 +146,7 @@ export class EncountersComponent implements OnInit {
     }
   }
 
-  editSymptom(symptomId: any) {
+  editSymptom(symptomId: number) {
     this.symptomService.get(symptomId)
     .subscribe({
       next: (response) => {
@@ -155,12 +158,12 @@ export class EncountersComponent implements OnInit {
     });
   }
 
-  deleteSymptom(item: any) {
-    const index = this.symptoms.indexOf(item);
+  deleteSymptom(symptomId: any) {
+    const index = this.symptoms.map(symptom => symptom.id).indexOf(symptomId);
     
-    this.symptomService.delete(item.id)
+    this.symptomService.delete(symptomId)
     .subscribe({
-      next: (response) => {
+      next: () => {
         this.symptoms.splice(index, 1);
       },
       error: (error) => {
@@ -169,4 +172,164 @@ export class EncountersComponent implements OnInit {
     });
   }
 
+  updateExamination(payload: any)  {
+    const formData: FormData = new FormData();
+    formData.append('pulse', payload.pulse);
+    formData.append('bp', payload.bp);
+    formData.append('temp', payload.temp);
+    formData.append('resp_rate', payload.resp_rate);
+    formData.append('height', payload.height);
+    formData.append('lifestyle', payload.lifestyle);
+    formData.append('encounter', this.encounterId.toString());
+
+    const examinationId = payload.id
+    if (examinationId) {
+      formData.append('id', examinationId);
+      
+      this.examinationService.update(examinationId, formData)
+      .subscribe({
+        next: (response) => {
+          this.examination = response;
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    } else {
+      this.examinationService.create(formData)
+      .subscribe({
+        next: (response) => {
+          this.examination = response;
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    }
+  }
+
+  addDrug(payload: any) {
+    const formData: FormData = new FormData();
+    formData.append('medicine', payload.medicine);
+    formData.append('power', payload.power);
+    formData.append('dosage', payload.dosage);
+    formData.append('instruction', payload.instruction);
+    formData.append('encounter', this.encounterId.toString());
+
+    const drugId = payload.id;
+    if (drugId) {
+      formData.append('id', drugId);
+      const index = this.drugs.map(drug => drug.id).indexOf(drugId);
+      
+      this.drugService.update(drugId, formData)
+      .subscribe({
+        next: (response) => {
+          this.drugs.splice(index, 1, response);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    } else {
+      this.drugService.create(formData)
+      .subscribe({
+        next: (response) => {
+          this.drugs.splice(this.drugs.length, 0 , response);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    }
+  }
+
+  editDrug(drugId: number) {
+    this.drugService.get(drugId)
+    .subscribe({
+      next: (response) => {
+        this.selctedDrug = response;
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  deleteDrug(drugId: number) {
+    const index = this.drugs.map(drug => drug.id).indexOf(drugId);
+
+    this.drugService.delete(drugId)
+    .subscribe({
+      next: () => {
+        this.drugs.splice(index, 1);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  addAdvice(payload: any) {
+    const formData: FormData = new FormData();
+    formData.append('encounter', this.encounterId.toString());
+    formData.append('advice', payload.advice);
+
+    const adviceId = payload.id;
+    if (adviceId) {
+      formData.append('id', adviceId);
+      const index = this.advices.map(advice => advice.id).indexOf(adviceId);
+      
+      this.adviceService.update(adviceId, formData)
+      .subscribe({
+        next: (response) => {
+          this.advices.splice(index, 1, response);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    } else {
+      this.adviceService.create(formData)
+      .subscribe({
+        next: (response) => {
+          this.advices.splice(this.advices.length, 0 , response);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    }
+  }
+
+  editAdvice(adviceId: number) {
+    this.adviceService.get(adviceId)
+    .subscribe({
+      next: (response) => {
+        this.selectedAdvice = response;
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    }
+      
+    );
+  }
+
+  deleteAdvice(adviceId: number) {
+    const index = this.advices.map(advice => advice.id).indexOf(adviceId);
+
+    this.adviceService.delete(adviceId)
+    .subscribe({
+      next: (response) => {
+        this.advices.splice(index, 1);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  printPage() {
+    window.print();
+  }
 }

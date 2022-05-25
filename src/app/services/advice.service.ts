@@ -8,7 +8,7 @@ import { Advice } from '../models/advice';
   providedIn: 'root'
 })
 export class AdviceService {
-  private baseUrl = environment.apiUrl + '/advices';
+  private baseUrl = environment.apiUrl + '/advices/';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class AdviceService {
   }
 
   get(id: number): Observable<Advice> {
-    return this.http.get<Advice>(`${this.baseUrl}/${id}` + '/');
+    return this.http.get<Advice>(`${this.baseUrl}${id}/`);
   }
 
   create(payload: any): Observable<Advice> {
@@ -25,14 +25,14 @@ export class AdviceService {
   }
 
   update(id: number, payload: any): Observable<Advice> {
-    return this.http.put<Advice>(`${this.baseUrl}/${id}`, payload);
+    return this.http.put<Advice>(`${this.baseUrl}${id}/`, payload);
   }
 
   partialUpdate(id: number, payload: any): Observable<Advice> {
-    return this.http.patch<Advice>(`${this.baseUrl}/${id}`, payload);
+    return this.http.patch<Advice>(`${this.baseUrl}${id}/`, payload);
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}${id}/`);
   }
 }

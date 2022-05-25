@@ -8,7 +8,7 @@ import { Drug } from '../models/drug';
   providedIn: 'root'
 })
 export class DrugService {
-  private baseUrl = environment.apiUrl + '/drugs';
+  private baseUrl = environment.apiUrl + '/drugs/';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class DrugService {
   }
 
   get(id: number): Observable<Drug> {
-    return this.http.get<Drug>(`${this.baseUrl}/${id}` + '/');
+    return this.http.get<Drug>(`${this.baseUrl}${id}/`);
   }
 
   create(payload: any): Observable<Drug> {
@@ -25,14 +25,14 @@ export class DrugService {
   }
 
   update(id: number, payload: any): Observable<Drug> {
-    return this.http.put<Drug>(`${this.baseUrl}/${id}`, payload);
+    return this.http.put<Drug>(`${this.baseUrl}${id}/`, payload);
   }
 
   partialUpdate(id: number, payload: any): Observable<Drug> {
-    return this.http.patch<Drug>(`${this.baseUrl}/${id}`, payload);
+    return this.http.patch<Drug>(`${this.baseUrl}${id}/`, payload);
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}${id}/`);
   }
 }

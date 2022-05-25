@@ -8,7 +8,7 @@ import { Encounter } from '../models/encounter';
   providedIn: 'root'
 })
 export class EncounterService {
-  private baseUrl = environment.apiUrl + '/encounters';
+  private baseUrl = environment.apiUrl + '/encounters/';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class EncounterService {
   }
 
   get(id: number): Observable<Encounter> {
-    return this.http.get<Encounter>(`${this.baseUrl}/${id}` + '/');
+    return this.http.get<Encounter>(`${this.baseUrl}${id}/`);
   }
 
   create(payload: any): Observable<Encounter> {
@@ -25,14 +25,14 @@ export class EncounterService {
   }
 
   update(id: number, payload: any): Observable<Encounter> {
-    return this.http.put<Encounter>(`${this.baseUrl}/${id}`, payload);
+    return this.http.put<Encounter>(`${this.baseUrl}${id}/`, payload);
   }
 
   partialUpdate(id: number, payload: any): Observable<Encounter> {
-    return this.http.patch<Encounter>(`${this.baseUrl}/${id}`, payload);
+    return this.http.patch<Encounter>(`${this.baseUrl}${id}/`, payload);
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}${id}/`);
   }
 }

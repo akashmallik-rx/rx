@@ -1,4 +1,69 @@
 /* You can add global styles to this file, and also import other style files */
+// @import "~bootstrap/dist/css/bootstrap-grid.min.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~bootstrap/dist/css/bootstrap-utilities.min.css";
+
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+ul { list-style-type: square; }
+
+table {
+  width: 100%;
+}
+
+.mat-form {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.custom-navbar {
+  background: #3f51b5;
+  padding: 1rem 0;
+  margin-bottom: 3rem;
+  nav {
+      display: flex !important;
+  }
+}
+
+.navbar-brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Iceland', cursive;
+  margin-right: auto;
+}
+
+.xm {
+  font-size: .8rem;
+}
+
+.copyright {
+  font-size: .75rem;
+  margin-bottom: 2rem;
+}
+
+footer {
+  margin-top: 2.5rem;
+  padding: 5px 0px;
+  background-color: #000000a3;
+  
+  .copyright {
+    color: #ffffff;
+    font-size: 1rem;
+    margin-bottom: 0;
+    padding: .5rem 0;
+  }
+}
+
+@media print {
+  .mat-tab-labels {
+      display: none !important;
+  }
+}

@@ -8,7 +8,7 @@ import { Symptom } from '../models/symptom';
   providedIn: 'root'
 })
 export class SymptomService {
-  private baseUrl = environment.apiUrl + '/symptoms';
+  private baseUrl = environment.apiUrl + '/symptoms/';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class SymptomService {
   }
 
   get(id: number): Observable<Symptom> {
-    return this.http.get<Symptom>(`${this.baseUrl}/${id}` + '/');
+    return this.http.get<Symptom>(`${this.baseUrl}${id}/`);
   }
 
   create(payload: any): Observable<Symptom> {
@@ -25,14 +25,14 @@ export class SymptomService {
   }
 
   update(id: number, payload: any): Observable<Symptom> {
-    return this.http.put<Symptom>(`${this.baseUrl}/${id}`, payload);
+    return this.http.put<Symptom>(`${this.baseUrl}${id}/`, payload);
   }
 
   partialUpdate(id: number, payload: any): Observable<Symptom> {
-    return this.http.patch<Symptom>(`${this.baseUrl}/${id}`, payload);
+    return this.http.patch<Symptom>(`${this.baseUrl}${id}/`, payload);
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}${id}/`);
   }
 }

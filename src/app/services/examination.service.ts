@@ -8,7 +8,7 @@ import { Examination } from '../models/examination';
   providedIn: 'root'
 })
 export class ExaminationService {
-  private baseUrl = environment.apiUrl + '/examinations';
+  private baseUrl = environment.apiUrl + '/examinations/';
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +17,7 @@ export class ExaminationService {
   }
 
   get(id: number): Observable<Examination> {
-    return this.http.get<Examination>(`${this.baseUrl}/${id}` + '/');
+    return this.http.get<Examination>(`${this.baseUrl}${id}/`);
   }
 
   create(payload: any): Observable<Examination> {
@@ -25,14 +25,14 @@ export class ExaminationService {
   }
 
   update(id: number, payload: any): Observable<Examination> {
-    return this.http.put<Examination>(`${this.baseUrl}/${id}`, payload);
+    return this.http.put<Examination>(`${this.baseUrl}${id}/`, payload);
   }
 
   partialUpdate(id: number, payload: any): Observable<Examination> {
-    return this.http.patch<Examination>(`${this.baseUrl}/${id}`, payload);
+    return this.http.patch<Examination>(`${this.baseUrl}${id}/`, payload);
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}${id}/`);
   }
 }
