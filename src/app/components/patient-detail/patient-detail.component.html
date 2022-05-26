@@ -9,6 +9,28 @@
   </mat-card-content>
 </mat-card>
 
-<mat-nav-list>
+<mat-card class="mt-3">
+  <mat-card-content>
+    <form #encounterForm="ngForm" (ngSubmit)="addEncounter(encounterForm.value)" class="mat-form">
+      <mat-form-field class="mat-form-field">
+        <input matInput [matDatepicker]="picker" ngModel name="date" placeholder="Choose a date">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      
+      <mat-form-field class="mat-form-field">
+        <mat-label>Visit Type</mat-label>
+        <mat-select ngModel name="visit_type">
+          <mat-option *ngFor="let visit of visitTypes" [value]="visit.key">{{ visit.value }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary">Submit</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-nav-list class="mt-3">
   <a mat-list-item routerLink="/patients/{{patientId}}/encounters/{{encounter.id}}" *ngFor="let encounter of encounters"> {{ encounter.date| date:'full' }} </a>
 </mat-nav-list>
