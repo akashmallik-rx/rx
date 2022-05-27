@@ -24,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
+import { CustomDatePipe } from './pipes/custom-date.pipe';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     DashboardComponent,
     PatientDetailComponent,
     EncountersComponent,
-    PatientComponent
+    PatientComponent,
+    CustomDatePipe,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatPaginatorModule,
     MatTabsModule
   ],
-  providers: [],
+  providers: [
+    DatePipe,
+    CustomDatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

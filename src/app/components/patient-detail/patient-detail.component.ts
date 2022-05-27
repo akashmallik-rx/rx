@@ -1,9 +1,9 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { Encounter } from 'src/app/models/encounter';
 import { Patient } from 'src/app/models/patient';
+import { CustomDatePipe } from 'src/app/pipes/custom-date.pipe';
 import { EncounterService } from 'src/app/services/encounter.service';
 import { PatientService } from 'src/app/services/patient.service';
 
@@ -28,8 +28,8 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
+    public datepipe: CustomDatePipe,
     private route: ActivatedRoute,
-    // private datePipe: DatePipe,
     private patientService: PatientService,
     private encounterService: EncounterService
   ) { }
@@ -48,10 +48,10 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+
   addEncounter(payload: any) {
     const formData: FormData = new FormData();
-    // formData.append('date', this.datePipe.transform(payload.date, 'yyyy-MM-dd'));
-    formData.append('date', '2022-05-21');
+    formData.append('date', this.datepipe.transform(payload.date));
     formData.append('visit_type', payload.visit_type);
     formData.append('patient', this.patientId.toString());
     

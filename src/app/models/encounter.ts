@@ -9,7 +9,7 @@ export interface Encounter {
   id: number;
   patient: number; 
   visit_type: string;
-  date: Date;
+  date: string;
   symptoms: Symptom[];
   examination: Examination;
   drugs: Drug[];

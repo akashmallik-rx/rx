@@ -21,6 +21,7 @@ export interface BloodGroup {
 export class PatientComponent implements OnInit {
   patientId!: number;
   patient: Patient = <Patient>{};
+  fileToUpload!: File;
 
   sexList: Sex[] = [
     { key: 'Male', value: 'Male'},
@@ -38,26 +39,16 @@ export class PatientComponent implements OnInit {
     { key: 'O+', value: 'O+'},
     { key: 'O-', value: 'O-'},
   ];
-  selectedFile: any;
 
   constructor(
     private patientService: PatientService,
     private router: Router) { }
 
   ngOnInit(): void {
-    this.patientService.get(this.patientId)
-    .subscribe({
-      next: (response) => {
-
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    })
   }
 
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+    this.fileToUpload = event.target.files[0];
   }
 
   save(payload: any) {
@@ -70,8 +61,8 @@ export class PatientComponent implements OnInit {
     formData.append('email', payload.email);
     formData.append('address', payload.address);
     
-    if (this.selectedFile) {
-      formData.append('avatar', this.selectedFile, this.selectedFile.name);
+    if (this.fileToUpload) {
+      formData.append('avatar', this.fileToUpload, this.fileToUpload.name);
     }
 
     if (this.patientId) {
@@ -93,6 +84,7 @@ export class PatientComponent implements OnInit {
         }
       });
     }
-    // this.router.navigate(['/']);
+    
+    this.router.navigate(['/']);
   }
 }
