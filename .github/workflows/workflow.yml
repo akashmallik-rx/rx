@@ -25,7 +25,7 @@ jobs:
           cache: 'npm'
 
       - name: Install and Build
-        run: npm install && npm run gh-build
+        run: npm install && npm run gh-build && cp dist/rx/index.html dist/rx/404.html
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
