@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Advice } from 'src/app/models/advice';
@@ -48,14 +47,20 @@ export class EncountersComponent implements OnInit {
     private patientService: PatientService,
     private powerService: MedicinePowerService,
     private symptomService: SymptomService,
-    private route: ActivatedRoute,
-    // private datepipe: DatePipe
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.patientId = Number(this.route.snapshot.paramMap.get('patientId'));
-    this.encounterId = Number(this.route.snapshot.paramMap.get('encounterId'));
+    this.activatedRoute.params.subscribe(params => {
+      this.patientId = params['patientId'];
+      this.encounterId = params['encounterId'];
+      this.fatchAllData();
+    })
+    // this.patientId = Number(this.activatedRoute.snapshot.paramMap.get('patientId'));
+    // this.encounterId = Number(this.activatedRoute.snapshot.paramMap.get('encounterId'));
+  }
 
+  fatchAllData() {
     this.patientService.get(this.patientId)
     .subscribe({
       next: (response) => {
@@ -102,20 +107,6 @@ export class EncountersComponent implements OnInit {
       },
       error: (error) => {
         console.log(error);
-      }
-    });
-  }
-
-  encounter(data: Encounter) {
-    const formData: FormData = new FormData();
-    // formData.append('date', String(this.datepipe.transform(data.date, 'yyyy-MM-dd')));
-    formData.append('visit_type', data.visit_type);
-    formData.append('patient', this.patientId.toString());
-    
-    this.encounterService.create(formData)
-    .subscribe({
-      next: (response) => {
-        this.encounters.splice(this.encounters.length, 0 , response);
       }
     });
   }
@@ -310,9 +301,7 @@ export class EncountersComponent implements OnInit {
       error: (error) => {
         console.log(error);
       }
-    }
-      
-    );
+    });
   }
 
   deleteAdvice(adviceId: number) {
