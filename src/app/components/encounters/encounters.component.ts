@@ -307,7 +307,7 @@ export class EncountersComponent implements OnInit {
 
     this.adviceService.delete(adviceId)
     .subscribe({
-      next: (response) => {
+      next: () => {
         this.advices.splice(index, 1);
       },
       error: (error) => {

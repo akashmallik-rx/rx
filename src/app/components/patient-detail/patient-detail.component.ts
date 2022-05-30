@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Encounter } from 'src/app/models/encounter';
 import { Patient } from 'src/app/models/patient';
 import { CustomDatePipe } from 'src/app/pipes/custom-date.pipe';
@@ -21,7 +22,9 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   patientId!: number;
   patient$: Patient = <Patient>{};
   patientSubscription: Subscription = new Subscription;
-  encounters: Encounter[] = [];
+
+  displayedColumns: string[] = ['encounter', 'action'];
+  encounterDataSource!: MatTableDataSource<Encounter>;
 
   visitTypes: Visit[] = [
     { key: 'ODP', value: 'ODP'},
@@ -40,7 +43,7 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     this.patientSubscription = this.patientService.get(this.patientId).subscribe({
       next: (response) => {
         this.patient$ = response;
-        this.encounters = response['encounters'];
+        this.encounterDataSource = new MatTableDataSource<Encounter>(response['encounters']);
       },
       error: (error) => {
         console.log(error);
@@ -58,7 +61,23 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     this.encounterService.create(formData)
     .subscribe({
       next: (response) => {
-        this.encounters.splice(this.encounters.length, 0 , response);
+        this.encounterDataSource.data.splice(this.encounterDataSource.data.length, 0, response);
+        this.encounterDataSource._updateChangeSubscription();        
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  deleteEncounter(encounterId: number) {
+    const index = this.encounterDataSource.data.map(encounter => encounter.id).indexOf(encounterId);
+
+    this.encounterService.delete(encounterId)
+    .subscribe({
+      next: () => {
+        this.encounterDataSource.data.splice(index, 1);
+        this.encounterDataSource._updateChangeSubscription();
       },
       error: (error) => {
         console.log(error);

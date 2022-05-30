@@ -39,11 +39,12 @@ export class DashboardComponent implements OnInit {
   }
 
   delete(patientId: number) {
-    const index = this.dataSource.data.findIndex(x => x.id === patientId);
+    const index = this.dataSource.data.map(patient => patient.id).indexOf(patientId);
+
     this.patientService.delete(patientId)
     .subscribe(
       {
-        next: (response) => {
+        next: () => {
           this.dataSource.data.splice(index, 1);
           this.dataSource._updateChangeSubscription();
         },
@@ -53,5 +54,4 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
 }
