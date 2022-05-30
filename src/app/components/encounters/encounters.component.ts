@@ -56,8 +56,6 @@ export class EncountersComponent implements OnInit {
       this.encounterId = params['encounterId'];
       this.fatchAllData();
     })
-    // this.patientId = Number(this.activatedRoute.snapshot.paramMap.get('patientId'));
-    // this.encounterId = Number(this.activatedRoute.snapshot.paramMap.get('encounterId'));
   }
 
   fatchAllData() {
