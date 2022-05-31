@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Advice } from 'src/app/models/advice';
 import { Drug } from 'src/app/models/drug';
@@ -36,7 +37,16 @@ export class EncountersComponent implements OnInit {
   selectedAdvice: Advice = <Advice>{};
   advices: Advice[] = [];
   medicines: Medicine[] = [];
-  powers: MedicinePower[] = [];
+  medicinePowers: MedicinePower[] = [];
+  filteredmedicinePowers: MedicinePower[] = [];
+
+  drugForm = new FormGroup({
+    id: new FormControl(''),
+    medicine: new FormControl(''),
+    power: new FormControl(''),
+    dosage: new FormControl(''),
+    instruction: new FormControl(''),
+  });
 
   constructor(
     private adviceService: AdviceService,
@@ -55,7 +65,12 @@ export class EncountersComponent implements OnInit {
       this.patientId = params['patientId'];
       this.encounterId = params['encounterId'];
       this.fatchAllData();
-    })
+    });
+
+    this.drugForm.valueChanges.subscribe(value => {
+      const medicineType = this.medicines.find(drug => drug.id == value.medicine)?.type;
+      this.filteredmedicinePowers = this.medicinePowers.filter(medicinePower => medicinePower.type == medicineType);
+    });
   }
 
   fatchAllData() {
@@ -101,7 +116,7 @@ export class EncountersComponent implements OnInit {
     this.powerService.getAll()
     .subscribe({
       next: (response) => {
-        this.powers = response;
+        this.medicinePowers = response;
       },
       error: (error) => {
         console.log(error);
