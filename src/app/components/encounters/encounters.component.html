@@ -78,30 +78,29 @@
             </mat-tab>
 
             <mat-tab label="Medicine">
-                <form class="mat-form mb-3" #drugForm="ngForm" (ngSubmit)="addDrug(drugForm.value); drugForm.reset();">
+                <form class="mat-form mb-3" [formGroup]="drugForm" (ngSubmit)="addDrug(drugForm.value); drugForm.reset();">
                     <mat-form-field class="mat-form-field" hidden>
-                        <input matInput [(ngModel)]="selctedDrug.id" name="id">
+                        <input matInput [(ngModel)]="selctedDrug.id" formControlName="id">
                     </mat-form-field>
                     <mat-form-field class="mat-form-field">
                         <mat-label>Medicine</mat-label>
-                        <mat-select [(ngModel)]="selctedDrug.medicine" name="medicine">
-                            <mat-option *ngFor="let medicine of medicines" [value]="medicine.id" selected>{{medicine.name}}
-                            </mat-option>
+                        <mat-select [(ngModel)]="selctedDrug.medicine" formControlName="medicine">
+                            <mat-option *ngFor="let medicine of medicines" [value]="medicine.id" selected>{{medicine.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Power</mat-label>
-                        <mat-select [(ngModel)]="selctedDrug.power" name="power">
-                            <mat-option *ngFor="let power of powers" [value]="power.id" selected>{{power.value}}</mat-option>
+                        <mat-select [(ngModel)]="selctedDrug.power" formControlName="power">
+                            <mat-option *ngFor="let power of filteredmedicinePowers" [value]="power.id" selected>{{power.value}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="mat-form-field">
                         <mat-label>Dosage</mat-label>
-                        <input matInput [(ngModel)]="selctedDrug.dosage" name="dosage">
+                        <input matInput [(ngModel)]="selctedDrug.dosage" formControlName="dosage">
                     </mat-form-field>
                     <mat-form-field class="mat-form-field">
                         <mat-label>Instruction</mat-label>
-                        <input matInput [(ngModel)]="selctedDrug.instruction" name="instruction">
+                        <input matInput [(ngModel)]="selctedDrug.instruction" formControlName="instruction">
                     </mat-form-field>
                     <button mat-raised-button type="button" color="warn" class="me-2" (click)="drugForm.reset();">Reset</button>
                     <button mat-raised-button color="primary" [disabled]="drugForm.invalid">Save</button>
