@@ -84,23 +84,23 @@
                     </mat-form-field>
                     <mat-form-field class="mat-form-field">
                         <mat-label>Medicine</mat-label>
-                        <mat-select [(ngModel)]="selctedDrug.medicine" formControlName="medicine">
+                        <mat-select [(ngModel)]="selctedDrug.medicine" formControlName="medicine" required>
                             <mat-option *ngFor="let medicine of medicines" [value]="medicine.id" selected>{{medicine.name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Power</mat-label>
-                        <mat-select [(ngModel)]="selctedDrug.power" formControlName="power">
+                        <mat-select [(ngModel)]="selctedDrug.power" formControlName="power" required>
                             <mat-option *ngFor="let power of filteredmedicinePowers" [value]="power.id" selected>{{power.value}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="mat-form-field">
                         <mat-label>Dosage</mat-label>
-                        <input matInput [(ngModel)]="selctedDrug.dosage" formControlName="dosage">
+                        <input matInput [(ngModel)]="selctedDrug.dosage" formControlName="dosage" required>
                     </mat-form-field>
                     <mat-form-field class="mat-form-field">
                         <mat-label>Instruction</mat-label>
-                        <input matInput [(ngModel)]="selctedDrug.instruction" formControlName="instruction">
+                        <input matInput [(ngModel)]="selctedDrug.instruction" formControlName="instruction" required>
                     </mat-form-field>
                     <button mat-raised-button type="button" color="warn" class="me-2" (click)="drugForm.reset();">Reset</button>
                     <button mat-raised-button color="primary" [disabled]="drugForm.invalid">Save</button>
