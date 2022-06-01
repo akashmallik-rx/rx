@@ -68,8 +68,14 @@ export class EncountersComponent implements OnInit {
     });
 
     this.drugForm.valueChanges.subscribe(value => {
-      const medicineType = this.medicines.find(drug => drug.id == value.medicine)?.type;
-      this.filteredmedicinePowers = this.medicinePowers.filter(medicinePower => medicinePower.type == medicineType);
+      let medicineTypes: number[] = [];
+
+      const medicine = this.medicines.find(medicine => medicine.id == value.medicine);
+      if (medicine) {
+        medicineTypes = medicine.types;
+      }
+      this.filteredmedicinePowers = this.medicinePowers.filter(
+        medicinePower => medicineTypes.includes(medicinePower.type));
     });
   }
 
@@ -77,7 +83,6 @@ export class EncountersComponent implements OnInit {
     this.patientService.get(this.patientId)
     .subscribe({
       next: (response) => {
-        console.log(response);
         this.patient = response;
         this.encounters = response['encounters'];
       }
@@ -86,7 +91,6 @@ export class EncountersComponent implements OnInit {
     this.encounterService.get(this.encounterId)
     .subscribe({
       next: (response) => {
-        console.log(response);
         this.selectedEncounter = response;
         this.symptoms = response["symptoms"]
         const examination = response["examination"];
