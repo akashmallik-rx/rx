@@ -11,6 +11,7 @@ import { PatientComponent } from './components/patient/patient.component';
 import { PatientDetailComponent } from './components/patient-detail/patient-detail.component';
 import { EncountersComponent } from './components/encounters/encounters.component';
 
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -44,6 +45,7 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,

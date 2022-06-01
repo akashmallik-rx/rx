@@ -82,12 +82,27 @@
                     <mat-form-field class="mat-form-field" hidden>
                         <input matInput [(ngModel)]="selctedDrug.id" formControlName="id">
                     </mat-form-field>
-                    <mat-form-field class="mat-form-field">
+                    <mat-form-field class="mat-form-field" appearance="fill">
+                        <mat-label>Medicine</mat-label>
+                        <input type="text"
+                               placeholder="Pick one"
+                               aria-label="Medicine"
+                               matInput
+                               formControlName="medicine"
+                               [matAutocomplete]="auto">
+                               
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                          <mat-option *ngFor="let medicine of filteredOptions | async" [value]="medicine.id">
+                            {{medicine.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    <!-- <mat-form-field class="mat-form-field">
                         <mat-label>Medicine</mat-label>
                         <mat-select [(ngModel)]="selctedDrug.medicine" formControlName="medicine" required>
                             <mat-option *ngFor="let medicine of medicines" [value]="medicine.id" selected>{{medicine.name}}</mat-option>
                         </mat-select>
-                    </mat-form-field>
+                    </mat-form-field> -->
                     <mat-form-field>
                         <mat-label>Power</mat-label>
                         <mat-select [(ngModel)]="selctedDrug.power" formControlName="power" required>
