@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { map, Observable, startWith } from 'rxjs';
 import { Advice } from 'src/app/models/advice';
 import { Drug } from 'src/app/models/drug';
 import { Encounter } from 'src/app/models/encounter';
@@ -47,6 +48,8 @@ export class EncountersComponent implements OnInit {
     dosage: new FormControl(''),
     instruction: new FormControl(''),
   });
+  
+  filteredOptions!: Observable<Medicine[]>;
 
   constructor(
     private adviceService: AdviceService,
@@ -77,6 +80,17 @@ export class EncountersComponent implements OnInit {
       this.filteredmedicinePowers = this.medicinePowers.filter(
         medicinePower => medicineTypes.includes(medicinePower.type));
     });
+
+    this.filteredOptions = this.drugForm.get("medicine")!.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value)),
+    );
+  }
+
+  private _filter(value: string): Medicine[] {
+    const filterValue = value.toString().toLowerCase();
+
+    return this.medicines.filter(medicine => medicine.name.toLowerCase().includes(filterValue));;
   }
 
   fatchAllData() {
