@@ -1,248 +1,281 @@
 <mat-card class="d-print-none">
-    <mat-card-title>{{ patient.name }}</mat-card-title>
-    <mat-card-subtitle>
-        <strong>Age:</strong> {{ patient.age }} <strong>Sex:</strong> {{ patient.sex }}
-    </mat-card-subtitle>
-    <mat-card-content>
-        <strong>Blood Group:</strong> {{ patient.blood_group }} <br>
-        <strong>Phone:</strong> {{ patient.phone }} <br>
-        <strong>Email:</strong> {{ patient.email }} <br>
-        <strong>Address:</strong> {{ patient.address }}
-    </mat-card-content>
+  <mat-card-title>{{ patient.name }}</mat-card-title>
+  <mat-card-subtitle>
+    <strong>Age:</strong> {{ patient.age }} <strong>Sex:</strong> {{ patient.sex }}
+  </mat-card-subtitle>
+  <mat-card-content>
+    <strong>Blood Group:</strong> {{ patient.blood_group }} <br>
+    <strong>Phone:</strong> {{ patient.phone }} <br>
+    <strong>Email:</strong> {{ patient.email }} <br>
+    <strong>Address:</strong> {{ patient.address }}
+  </mat-card-content>
 </mat-card>
 
 <div class="row">
-    <div class="col-md-3">
-        <mat-nav-list class="mt-3">
-            <a mat-list-item [class.active]="encounterId == encounter.id" routerLink="/patients/{{patientId}}/encounters/{{encounter.id}}" *ngFor="let encounter of encounters"> {{ encounter.date| date:'full' }} </a>
-        </mat-nav-list>
-    </div>
-    <div class="col-md-9">
-        <mat-tab-group>
-            <mat-tab label="C/C">
-                <form class="mat-form mb-3" #symptomForm="ngForm" (ngSubmit)="addSymptom(symptomForm.value); symptomForm.reset();">
-                    <mat-form-field class="mat-form-field" hidden>
-                        <input matInput [(ngModel)]="selectedSymptom.id" name="id">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <textarea matInput [(ngModel)]="selectedSymptom.symptom" #sym="ngModel" name="symptom"
-                            placeholder="Symptom" required></textarea>
-                        <mat-error *ngIf="sym.touched && sym.invalid">
-                            The <strong>symptom</strong> field is required.
-                        </mat-error>
-                    </mat-form-field>
-                    <button mat-raised-button type="button" color="warn" class="me-2" (click)="symptomForm.reset();">Reset</button>
-                    <button mat-raised-button color="primary" [disabled]="symptomForm.invalid">Save</button>
-                </form>
-                <mat-divider></mat-divider>
-                <mat-list>
-                    <mat-list-item *ngFor="let symptom of symptoms">
-                        <h4 matLine>{{ symptom.symptom }}</h4>
-                        <button class="me-2" mat-icon-button color="primary" (click)="editSymptom(symptom.id);">
-                            <i class="material-icons">edit</i>
-                        </button>
-                        <button mat-icon-button color="warn" (click)="deleteSymptom(symptom.id);">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </mat-list-item>
-                </mat-list>
-            </mat-tab>
+  <div class="col-md-3">
+    <mat-nav-list class="mt-3">
+      <a mat-list-item [class.active]="encounterId == encounter.id"
+        routerLink="/patients/{{patientId}}/encounters/{{encounter.id}}" *ngFor="let encounter of encounters"> {{
+        encounter.date| date:'full' }} </a>
+    </mat-nav-list>
+  </div>
+  <div class="col-md-9">
+    <mat-tab-group>
+      <mat-tab label="C/C">
+        <form class="mat-form mb-3" #symptomForm="ngForm"
+          (ngSubmit)="addSymptom(symptomForm.value); symptomForm.reset();">
+          
+          <mat-form-field class="mat-form-field" appearance="outline" hidden>
+            <mat-label>ID</mat-label>
+            <input matInput [(ngModel)]="selectedSymptom.id" name="id">
+          </mat-form-field>
+          
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Symptom</mat-label>
+            <textarea matInput [(ngModel)]="selectedSymptom.symptom" #sym="ngModel" name="symptom" required></textarea>
+            <mat-error *ngIf="sym.touched && sym.invalid">
+              The <strong>symptom</strong> field is required.
+            </mat-error>
+          </mat-form-field>
+          
+          <button mat-raised-button type="button" color="warn" class="me-2"
+            (click)="symptomForm.reset();">Reset</button>
+          <button mat-raised-button color="primary" [disabled]="symptomForm.invalid">Save</button>
+        </form>
+        
+        <mat-divider></mat-divider>
+        
+        <mat-list>
+          <mat-list-item *ngFor="let symptom of symptoms">
+            <h4 matLine>{{ symptom.symptom }}</h4>
+            <button class="me-2" mat-icon-button color="primary" (click)="editSymptom(symptom.id);">
+              <i class="material-icons">edit</i>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteSymptom(symptom.id);">
+              <i class="material-icons">delete</i>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
 
-            <mat-tab label="Examination">
-                <form #reportForm="ngForm" (ngSubmit)="updateExamination(reportForm.value); reportForm.reset()"
-                    class="mat-form">
-                    <mat-form-field class="mat-form-field" hidden>
-                        <input matInput [(ngModel)]="examination.id" name="id">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <input matInput [(ngModel)]="examination.pulse" name="pulse" placeholder="Pulse">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <input matInput [(ngModel)]="examination.bp" name="bp" placeholder="BP">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <input matInput [(ngModel)]="examination.temp" name="temp" placeholder="Temp">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <input matInput [(ngModel)]="examination.resp_rate" name="resp_rate" placeholder="Resp rate">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <input matInput [(ngModel)]="examination.height" name="height" placeholder="Height">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <input matInput [(ngModel)]="examination.lifestyle" name="lifestyle" placeholder="Lifestyle">
-                    </mat-form-field>
-                    <button mat-raised-button color="primary" [disabled]="reportForm.invalid">{{ examination.id ? 'Update' :
-                        'Add' }}</button>
-                </form>
-            </mat-tab>
+      <mat-tab label="Examination">
+        <form #reportForm="ngForm" (ngSubmit)="updateExamination(reportForm.value); reportForm.reset()"
+          class="mat-form">
+          <mat-form-field class="mat-form-field" hidden>
+            <input matInput [(ngModel)]="examination.id" name="id">
+          </mat-form-field>
+          <!-- <mat-form-field appearance="outline">
+                        <input matInput [(ngModel)]="examination.pulse" placeholder="Placeholder">
+                        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                        <mat-hint>Hint</mat-hint>
+                    </mat-form-field> -->
 
-            <mat-tab label="Medicine">
-                <form class="mat-form mb-3" [formGroup]="drugForm" (ngSubmit)="addDrug(drugForm.value); drugForm.reset();">
-                    <mat-form-field class="mat-form-field" hidden>
-                        <input matInput [(ngModel)]="selctedDrug.id" formControlName="id">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field" appearance="fill">
-                        <mat-label>Medicine</mat-label>
-                        <input type="text"
-                               placeholder="Pick one"
-                               aria-label="Medicine"
-                               matInput
-                               formControlName="medicine"
-                               [matAutocomplete]="auto">
-                               
-                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                          <mat-option *ngFor="let medicine of filteredOptions | async" [value]="medicine.id">
-                            {{medicine.name}}
-                          </mat-option>
-                        </mat-autocomplete>
-                      </mat-form-field>
-                    <!-- <mat-form-field class="mat-form-field">
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Pulse <sub>(BPM)</sub></mat-label>
+            <input matInput [(ngModel)]="examination.pulse" name="pulse">
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>BP</mat-label>
+            <input matInput [(ngModel)]="examination.bp" name="bp">
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Temperature <sub>(℉)</sub></mat-label>
+            <input matInput [(ngModel)]="examination.temp" name="temp" placeholder="Normal 98℉">
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Resp rate</mat-label>
+            <input matInput [(ngModel)]="examination.resp_rate" name="resp_rate">
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Height</mat-label>
+            <input matInput [(ngModel)]="examination.height" name="height">
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Lifestyle</mat-label>
+            <input matInput [(ngModel)]="examination.lifestyle" name="lifestyle">
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" [disabled]="reportForm.invalid">Save</button>
+        </form>
+      </mat-tab>
+
+      <mat-tab label="Medicine">
+        <form class="mat-form mb-3" [formGroup]="drugForm" (ngSubmit)="addDrug(drugForm.value); drugForm.reset();">
+          <mat-form-field class="mat-form-field" hidden>
+            <input matInput [(ngModel)]="selctedDrug.id" formControlName="id">
+          </mat-form-field>
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Medicine</mat-label>
+            <input type="text" placeholder="Pick one" aria-label="Medicine" matInput formControlName="medicine"
+              [matAutocomplete]="auto">
+
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <mat-option *ngFor="let medicine of filteredOptions | async" [value]="medicine.id">
+                {{medicine.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <!-- <mat-form-field class="mat-form-field">
                         <mat-label>Medicine</mat-label>
                         <mat-select [(ngModel)]="selctedDrug.medicine" formControlName="medicine" required>
                             <mat-option *ngFor="let medicine of medicines" [value]="medicine.id" selected>{{medicine.name}}</mat-option>
                         </mat-select>
                     </mat-form-field> -->
-                    <mat-form-field>
-                        <mat-label>Power</mat-label>
-                        <mat-select [(ngModel)]="selctedDrug.power" formControlName="power" required>
-                            <mat-option *ngFor="let power of filteredmedicinePowers" [value]="power.id" selected>{{power.value}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <mat-label>Dosage</mat-label>
-                        <input matInput [(ngModel)]="selctedDrug.dosage" formControlName="dosage" required>
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <mat-label>Instruction</mat-label>
-                        <input matInput [(ngModel)]="selctedDrug.instruction" formControlName="instruction" required>
-                    </mat-form-field>
-                    <button mat-raised-button type="button" color="warn" class="me-2" (click)="drugForm.reset();">Reset</button>
-                    <button mat-raised-button color="primary" [disabled]="drugForm.invalid">Save</button>
-                </form>
+          <mat-form-field  appearance="outline">
+            <mat-label>Power</mat-label>
+            <mat-select [(ngModel)]="selctedDrug.power" formControlName="power" required>
+              <mat-option *ngFor="let power of filteredmedicinePowers" [value]="power.id" selected>{{power.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Dosage</mat-label>
+            <input matInput [(ngModel)]="selctedDrug.dosage" formControlName="dosage" required>
+          </mat-form-field>
+
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Instruction</mat-label>
+            <input matInput [(ngModel)]="selctedDrug.instruction" formControlName="instruction" required>
+          </mat-form-field>
+
+          <button mat-raised-button type="button" color="warn" class="me-2" (click)="drugForm.reset();">Reset</button>
+          <button mat-raised-button color="primary" [disabled]="drugForm.invalid">Save</button>
+        </form>
+        
+        <mat-divider></mat-divider>
+        
+        <mat-list>
+          <mat-list-item *ngFor="let drug of drugs">
+            <h4 matLine>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})
+            </h4>
+            <button class="me-2" mat-icon-button color="primary" (click)="editDrug(drug.id);">
+              <i class="material-icons">edit</i>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteDrug(drug.id);">
+              <i class="material-icons">delete</i>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+
+      <mat-tab label="Advice">
+        <form class="mat-form mb-3" #adviceForm="ngForm" (ngSubmit)="addAdvice(adviceForm.value); adviceForm.reset();">
+          <mat-form-field class="mat-form-field" appearance="outline" hidden>
+            <mat-label>Id.</mat-label>
+            <input matInput [(ngModel)]="selectedAdvice.id" name="id">
+          </mat-form-field>
+          
+          <mat-form-field class="mat-form-field" appearance="outline">
+            <mat-label>Advice</mat-label>
+            <textarea matInput [(ngModel)]="selectedAdvice.advice" #adv="ngModel" name="advice" required></textarea>
+            <mat-error *ngIf="adv.touched && adv.invalid">The <strong>advice</strong> field is required.</mat-error>
+          </mat-form-field>
+          
+          <button mat-raised-button type="button" color="warn" class="me-2" (click)="adviceForm.reset();">Reset</button>
+          <button mat-raised-button color="primary" [disabled]="adviceForm.invalid">Save</button>
+        </form>
+
+        <mat-divider></mat-divider>
+        
+        <mat-list>
+          <mat-list-item *ngFor="let advice of advices">
+            <h4 matLine>{{ advice.advice }}</h4>
+            <button mat-icon-button color="warn" (click)="editAdvice(advice.id);">
+              <i class="material-icons">edit</i>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteAdvice(advice.id);">
+              <i class="material-icons">delete</i>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+
+      <mat-tab label="Prescription">
+        <mat-card #print>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-8">
+                <strong class="text-capitalize">DR: SAGAR MALLIK</strong> <br>
+                <strong>DHMS</strong> <br>
+                Stength: General <br>
+                Reg. No.- 55065
+              </div>
+              <div class="col-4">
+                <strong>Maa Homeo Pharmacy</strong> <br>
+                <strong>Phone:</strong> +88 01777-334628 <br>
+                <strong>Email:</strong> info@maahomeo.com <br>
+                <strong>Website:</strong> www.maahomeo.com
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div *ngIf="patient">
+              <h3 class="text-center">Patient: <strong>{{ patient.name }}</strong></h3>
+              <div class="row align-items-middle">
+                <div class="col-9">
+                  <strong>Sex:</strong> {{ patient.sex }} <strong>Age:</strong> {{ patient.age }}
+                  <strong>Blood Group:</strong> {{ patient.blood_group }} <br>
+                  <strong>Phone:</strong> {{ patient.phone }} <strong>Email:</strong> {{ patient.email }} <br>
+                  <strong>Address:</strong> {{ patient.address }}
+                </div>
+                <div class="col-3">
+                  <strong>Encounter Id: </strong> {{ selectedEncounter.id }}
+                  <!-- <qrcode qrdata="1" [size]="30" [level]="'L'"></qrcode> -->
+                  <br>
+                  <strong>Date: </strong> {{ selectedEncounter.date }}
+                </div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="row">
+              <div class="col-4">
+                <h4>Symptoms</h4>
                 <mat-divider></mat-divider>
-                <mat-list>
-                    <mat-list-item *ngFor="let drug of drugs">
-                        <h4 matLine>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})
-                        </h4>
-                        <button class="me-2" mat-icon-button color="primary" (click)="editDrug(drug.id);">
-                            <i class="material-icons">edit</i>
-                        </button>
-                        <button mat-icon-button color="warn" (click)="deleteDrug(drug.id);">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </mat-list-item>
-                </mat-list>
-            </mat-tab>
-
-            <mat-tab label="Advice">
-                <form class="mat-form mb-3" #adviceForm="ngForm" (ngSubmit)="addAdvice(adviceForm.value); adviceForm.reset();">
-                    <mat-form-field class="mat-form-field" hidden>
-                        <input matInput [(ngModel)]="selectedAdvice.id" name="id">
-                    </mat-form-field>
-                    <mat-form-field class="mat-form-field">
-                        <textarea matInput [(ngModel)]="selectedAdvice.advice" #adv="ngModel" name="advice" placeholder="Advice"
-                            required></textarea>
-                        <mat-error *ngIf="adv.touched && adv.invalid">The <strong>advice</strong> field is required.</mat-error>
-                    </mat-form-field>
-                    <button mat-raised-button type="button" color="warn" class="me-2"
-                        (click)="adviceForm.reset();">Reset</button>
-                    <button mat-raised-button color="primary" [disabled]="adviceForm.invalid">Save</button>
-                </form>
+                <ul>
+                  <li *ngFor="let symptom of symptoms">
+                    {{ symptom.symptom }}
+                  </li>
+                </ul>
+                <h4>General Info</h4>
                 <mat-divider></mat-divider>
-                <mat-list>
-                    <mat-list-item *ngFor="let advice of advices">
-                        <h4 matLine>{{ advice.advice }}</h4>
-                        <button mat-icon-button color="warn" (click)="editAdvice(advice.id);">
-                            <i class="material-icons">edit</i>
-                        </button>
-                        <button mat-icon-button color="warn" (click)="deleteAdvice(advice.id);">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </mat-list-item>
-                </mat-list>
-            </mat-tab>
+                <ul>
+                  <li>Pulse: {{ examination.pulse }}</li>
+                  <li>B.P.: {{ examination.bp }}</li>
+                  <li>Temp: {{ examination.temp }}</li>
+                  <li>Resp rate: {{ examination.resp_rate }}</li>
+                  <li>Height: {{ examination.height }}</li>
+                  <li>Lifestyle: {{ examination.lifestyle }}</li>
+                </ul>
+                <h4>Advices</h4>
+                <mat-divider></mat-divider>
+                <ul>
+                  <li *ngFor="let advice of advices">
+                    {{ advice.advice }}
+                  </li>
+                </ul>
 
-            <mat-tab label="Prescription">
-                <mat-card #print>
-                    <mat-card-content>
-                        <div class="row">
-                            <div class="col-8">
-                                <strong class="text-capitalize">DR: SAGAR MALLIK</strong> <br>
-                                <strong>DHMS</strong> <br>
-                                Stength: General <br>
-                                Reg. No.- 55065
-                            </div>
-                            <div class="col-4">
-                                <strong>Maa Homeo Pharmacy</strong> <br>
-                                <strong>Phone:</strong> +88 01777-334628 <br>
-                                <strong>Email:</strong> info@maahomeo.com <br>
-                                <strong>Website:</strong> www.maahomeo.com
-                            </div>
-                        </div>
-                        <mat-divider></mat-divider>
-                        <div *ngIf="patient">
-                            <h3 class="text-center">Patient: <strong>{{ patient.name }}</strong></h3>
-                            <div class="row align-items-middle">
-                                <div class="col-9">
-                                    <strong>Sex:</strong> {{ patient.sex }} <strong>Age:</strong> {{ patient.age }}
-                                    <strong>Blood Group:</strong> {{ patient.blood_group }} <br>
-                                    <strong>Phone:</strong> {{ patient.phone }} <strong>Email:</strong> {{ patient.email }} <br>
-                                    <strong>Address:</strong> {{ patient.address }}
-                                </div>
-                                <div class="col-3">
-                                    <strong>Encounter Id: </strong> {{ selectedEncounter.id }}
-                                    <!-- <qrcode qrdata="1" [size]="30" [level]="'L'"></qrcode> -->
-                                    <br>
-                                    <strong>Date: </strong> {{ selectedEncounter.date }}
-                                </div>
-                            </div>
-                        </div>
-                        <mat-divider></mat-divider>
-                        <div class="row">
-                            <div class="col-4">
-                                <h4>Symptoms</h4>
-                                <mat-divider></mat-divider>
-                                <ul>
-                                    <li *ngFor="let symptom of symptoms">
-                                        {{ symptom.symptom }}
-                                    </li>
-                                </ul>
-                                <h4>General Info</h4>
-                                <mat-divider></mat-divider>
-                                <ul>
-                                    <li>Pulse: {{ examination.pulse }}</li>
-                                    <li>B.P.: {{ examination.bp }}</li>
-                                    <li>Temp: {{ examination.temp }}</li>
-                                    <li>Resp rate: {{ examination.resp_rate }}</li>
-                                    <li>Height: {{ examination.height }}</li>
-                                    <li>Lifestyle: {{ examination.lifestyle }}</li>
-                                </ul>
-                                <h4>Advices</h4>
-                                <mat-divider></mat-divider>
-                                <ul>
-                                    <li *ngFor="let advice of advices">
-                                        {{ advice.advice }}
-                                    </li>
-                                </ul>
+              </div>
+              <div class="col-8">
+                <h4>Medicines</h4>
+                <mat-divider></mat-divider>
+                <ul *ngFor="let drug of drugs">
+                  <li>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})</li>
+                </ul>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-footer>
+            <div class="text-center copyright">Designed & Developed By: <strong>Team R<sub>x</sub></strong></div>
+          </mat-card-footer>
+        </mat-card>
 
-                            </div>
-                            <div class="col-8">
-                                <h4>Medicines</h4>
-                                <mat-divider></mat-divider>
-                                <ul *ngFor="let drug of drugs">
-                                    <li>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </mat-card-content>
-                    <mat-card-footer>
-                        <div class="text-center copyright">Designed & Developed By: <strong>Team R<sub>x</sub></strong></div>
-                    </mat-card-footer>
-                </mat-card>
-
-                <button mat-raised-button color="primary" class="mt-3 d-print-none" (click)="printPage()">Print</button>
-            </mat-tab>
-        </mat-tab-group>
-    </div>
+        <button mat-raised-button color="primary" class="mt-3 d-print-none" (click)="printPage()">Print</button>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>
