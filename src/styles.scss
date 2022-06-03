@@ -41,6 +41,12 @@ table {
   }
 }
 
+.custom-mat-list-item {
+  span.mat-list-item-content {
+    padding: 0 !important;
+  }
+}
+
 .navbar-brand {
   color: #ffffff;
   text-decoration: none;
