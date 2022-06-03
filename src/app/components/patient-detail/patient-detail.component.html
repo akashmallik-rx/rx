@@ -9,9 +9,9 @@
   </mat-card-content>
 </mat-card>
 
-<div class="row">
+<div class="row mt-3">
   <div class="col-md-3">
-    <mat-card class="mt-3">
+    <mat-card>
       <mat-card-content>
         <form #encounterForm="ngForm" (ngSubmit)="addEncounter(encounterForm.value)" class="mat-form">
           <mat-form-field class="mat-form-field">
@@ -35,7 +35,7 @@
   </div>
 
   <div class="col-md-9">
-    <table mat-table [dataSource]="encounterDataSource" class="mt-3">
+    <table mat-table [dataSource]="encounterDataSource">
       <ng-container matColumnDef="encounter">
         <th mat-header-cell *matHeaderCellDef> Encounter </th>
         <td mat-cell *matCellDef="let encounter"> {{encounter.date | date:'full'}} </td>
