@@ -24,9 +24,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
 
 @NgModule({
@@ -56,6 +57,7 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
     MatListModule,
     MatNativeDateModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatTableModule,
     MatPaginatorModule,
     MatProgressBarModule,
@@ -63,7 +65,8 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
   ],
   providers: [
     DatePipe,
-    CustomDatePipe
+    CustomDatePipe,
+    TitleCasePipe
   ],
   bootstrap: [AppComponent]
 })

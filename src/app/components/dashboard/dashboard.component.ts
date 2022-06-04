@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Patient } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
+import { NotificationService } from 'src/app/utils/notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +19,7 @@ export class DashboardComponent implements OnInit {
   paginator!: MatPaginator;
 
   constructor(
+    private notification: NotificationService,
     private patientService: PatientService,
   ) { }
 
@@ -32,7 +34,7 @@ export class DashboardComponent implements OnInit {
           this.dataSource._updateChangeSubscription();
         },
         error: (error) => {
-          console.error(error);
+          this.notification.handleError('Failed to get patient information.', error);
         }
       }
     );
@@ -47,9 +49,10 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.dataSource.data.splice(index, 1);
           this.dataSource._updateChangeSubscription();
+          this.notification.onDeleteSuccess();
         },
         error: (error) => {
-          console.error(error);
+          this.notification.handleError('Failed to delete patient.', error);
         }
       }
     );
