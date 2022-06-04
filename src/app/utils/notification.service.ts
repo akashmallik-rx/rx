@@ -14,37 +14,37 @@ export class NotificationService {
     private _snackBar: MatSnackBar,
   ) { }
 
-  public openSnackBar(message: string, label: string) {
-    this._snackBar.open(message, label, {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-      duration: 2500
-    });
-  }
-
-  public handleSuccess(message: string) {
-    this.openSnackBar(message, 'SUCCESS');
+  public onSuccess(message: string) {
+    this._openSnackBar(message, 'SUCCESS');
   }
 
   public onCreateSuccess() {
-    this.handleSuccess('Successfully Created.');
+    this.onSuccess('Successfully Created.');
   }
 
   public onUpdateSuccess() {
-    this.handleSuccess('Successfully Updated.');
+    this.onSuccess('Successfully Updated.');
   }
 
   public onDeleteSuccess() {
-    this.handleSuccess('Successfully Deleted.');
+    this.onSuccess('Successfully Deleted.');
   }
 
   public handleError(message: string, error: any) {
     Object.keys(error.error).map((key,_) => {
       error.error[key].forEach( (message: string) => {
         console.log(message);
-        this.openSnackBar(`${this._titleCasePipe.transform(key)}: ${message}`, 'ERROR');
+        this._openSnackBar(`${this._titleCasePipe.transform(key)}: ${message}`, 'ERROR');
       });
     });
-    // this.openSnackBar(message, 'Error');
+    // this._openSnackBar(message, 'Error');
+  }
+
+  private _openSnackBar(message: string, label: string) {
+    this._snackBar.open(message, label, {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      duration: 2500
+    });
   }
 }
