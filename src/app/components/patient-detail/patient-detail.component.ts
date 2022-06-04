@@ -7,6 +7,7 @@ import { Patient } from 'src/app/models/patient';
 import { CustomDatePipe } from 'src/app/pipes/custom-date.pipe';
 import { EncounterService } from 'src/app/services/encounter.service';
 import { PatientService } from 'src/app/services/patient.service';
+import { NotificationService } from 'src/app/utils/notification.service';
 
 export interface Visit {
   key: string;
@@ -31,6 +32,7 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
+    public notification: NotificationService,
     public datepipe: CustomDatePipe,
     private route: ActivatedRoute,
     private patientService: PatientService,
@@ -46,11 +48,10 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
         this.encounterDataSource = new MatTableDataSource<Encounter>(response['encounters']);
       },
       error: (error) => {
-        console.log(error);
+        this.notification.handleError('Failed to get patient information.', error);
       }
     });
   }
-
 
   addEncounter(payload: any) {
     const formData: FormData = new FormData();
@@ -62,10 +63,11 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     .subscribe({
       next: (response) => {
         this.encounterDataSource.data.splice(this.encounterDataSource.data.length, 0, response);
-        this.encounterDataSource._updateChangeSubscription();        
+        this.encounterDataSource._updateChangeSubscription();
+        this.notification.onCreateSuccess();        
       },
       error: (error) => {
-        console.log(error);
+        this.notification.handleError('Failed to add encounter data.', error);
       }
     });
   }
@@ -78,9 +80,10 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
       next: () => {
         this.encounterDataSource.data.splice(index, 1);
         this.encounterDataSource._updateChangeSubscription();
+        this.notification.onDeleteSuccess();
       },
       error: (error) => {
-        console.log(error);
+        this.notification.handleError('Failed to delete encounter.', error);
       }
     });
   }

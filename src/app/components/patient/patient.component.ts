@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Patient } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
+import { NotificationService } from 'src/app/utils/notification.service';
 
 export interface Sex {
   key: string;
@@ -41,6 +42,7 @@ export class PatientComponent implements OnInit {
   ];
 
   constructor(
+    private notification: NotificationService,
     private patientService: PatientService,
     private router: Router) { }
 
@@ -68,23 +70,25 @@ export class PatientComponent implements OnInit {
     if (this.patientId) {
       this.patientService.update(this.patientId, formData)
       .subscribe({
-        next: (response) => {
+        next: () => {
+          this.notification.onUpdateSuccess();
+          this.router.navigate(['/']);
         },
         error: (error) => {
-          console.log(error);
+          this.notification.handleError('Failed to update patient data.', error);
         }
       });
     } else {
       this.patientService.create(formData)
       .subscribe({
-        next: (response) => {
+        next: () => {
+          this.notification.onCreateSuccess();
+          this.router.navigate(['/']);
         },
         error: (error) => {
-          console.log(error);
+          this.notification.handleError('Failed to add patient data.', error);
         }
       });
-    }
-    
-    this.router.navigate(['/']);
+    }    
   }
 }
