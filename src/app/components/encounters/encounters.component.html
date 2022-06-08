@@ -1,4 +1,22 @@
-<mat-card class="d-print-none">
+<div class="mat-breadcrumb">
+  <a mat-button routerLink="/" class="mat-breadcrumb-item">Home</a> / <a mat-button routerLink="/patients/{{patientId}}" class="mat-breadcrumb-item">{{ patient.name }}</a> / <button mat-button class="mat-breadcrumb-item" disabled>Encounters</button>
+</div>
+
+<!-- <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a routerLink="/patients/{{patientId}}">Patient</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      {{ patient.name }}
+    </li>
+  </ol>
+</nav> -->
+
+<mat-card class="d-print-none mt-2">
   <mat-card-title>{{ patient.name }}</mat-card-title>
   <mat-card-subtitle>
     <strong>Age:</strong> {{ patient.age }} <strong>Sex:</strong> {{ patient.sex }}

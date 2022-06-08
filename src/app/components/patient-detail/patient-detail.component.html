@@ -1,4 +1,8 @@
-<mat-card>
+<div class="mat-breadcrumb">
+  <a mat-button routerLink="/" class="mat-breadcrumb-item">Home</a> / <button mat-button class="mat-breadcrumb-item" disabled>{{patient$.name}}</button>
+</div>
+
+<mat-card class="mt-2">
   <mat-card-title>{{patient$.name}}</mat-card-title>
   <mat-card-subtitle><strong>Age:</strong> {{ patient$.age }} <strong>Sex:</strong> {{ patient$.sex }}</mat-card-subtitle>
   <mat-card-content>
