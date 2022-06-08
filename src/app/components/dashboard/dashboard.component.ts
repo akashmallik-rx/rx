@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Patient } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
+import { AlertService } from 'src/app/utils/alert.service';
 import { NotificationService } from 'src/app/utils/notification.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private notification: NotificationService,
+    private alert: AlertService,
     private patientService: PatientService,
   ) { }
 
@@ -41,20 +43,28 @@ export class DashboardComponent implements OnInit {
   }
 
   delete(patientId: number) {
-    const index = this.dataSource.data.map(patient => patient.id).indexOf(patientId);
+    const confirmation$ = this.alert.onDeleteConfirmation();
 
-    this.patientService.delete(patientId)
-    .subscribe(
-      {
-        next: () => {
-          this.dataSource.data.splice(index, 1);
-          this.dataSource._updateChangeSubscription();
-          this.notification.onDeleteSuccess();
-        },
-        error: (error) => {
-          this.notification.handleError('Failed to delete patient.', error);
+    confirmation$.subscribe({
+      next: (result) => {
+        if (result) {
+          const index = this.dataSource.data.map(patient => patient.id).indexOf(patientId);
+
+          this.patientService.delete(patientId)
+          .subscribe(
+            {
+              next: () => {
+                this.dataSource.data.splice(index, 1);
+                this.dataSource._updateChangeSubscription();
+                this.notification.onDeleteSuccess();
+              },
+              error: (error) => {
+                this.notification.handleError('Failed to delete patient.', error);
+              }
+            }
+          );
         }
       }
-    );
+    });
   }
 }

@@ -18,6 +18,7 @@ import { MedicinePowerService } from 'src/app/services/medicine-power.service';
 import { MedicineService } from 'src/app/services/medicine.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { SymptomService } from 'src/app/services/symptom.service';
+import { AlertService } from 'src/app/utils/alert.service';
 import { NotificationService } from 'src/app/utils/notification.service';
 
 @Component({
@@ -54,6 +55,7 @@ export class EncountersComponent implements OnInit {
 
   constructor(
     private notification: NotificationService,
+    private alert: AlertService,
     private adviceService: AdviceService,
     private drugService: DrugService,
     private encounterService: EncounterService,
@@ -94,6 +96,16 @@ export class EncountersComponent implements OnInit {
 
     return this.medicines.filter(medicine => medicine.name.toLowerCase().includes(filterValue));;
   }
+
+  // loadData() : void {
+  //   Observable.forkJoin(
+  //       this.blogApi.getPosts(),
+  //       this.blogApi.getTags()
+  //   ).subscribe((([posts, tags]: [Post[], Tag[]]) => {
+  //       this.posts = posts;
+  //       this.tags = tags;
+  //   }));
+  // }
 
   fatchAllData() {
     this.patientService.get(this.patientId)
@@ -194,16 +206,24 @@ export class EncountersComponent implements OnInit {
   }
 
   deleteSymptom(symptomId: any) {
-    const index = this.symptoms.map(symptom => symptom.id).indexOf(symptomId);
+    const confirmation$ = this.alert.onDeleteConfirmation();
+
+    confirmation$.subscribe({
+      next: (result) => {
+        if(result) {
+          const index = this.symptoms.map(symptom => symptom.id).indexOf(symptomId);
     
-    this.symptomService.delete(symptomId)
-    .subscribe({
-      next: () => {
-        this.symptoms.splice(index, 1);
-        this.notification.onDeleteSuccess();
-      },
-      error: (error) => {
-        this.notification.handleError('Failed to delete symptom.', error);
+          this.symptomService.delete(symptomId)
+          .subscribe({
+            next: () => {
+              this.symptoms.splice(index, 1);
+              this.notification.onDeleteSuccess();
+            },
+            error: (error) => {
+              this.notification.handleError('Failed to delete symptom.', error);
+            }
+          });
+        }
       }
     });
   }
@@ -296,16 +316,24 @@ export class EncountersComponent implements OnInit {
   }
 
   deleteDrug(drugId: number) {
-    const index = this.drugs.map(drug => drug.id).indexOf(drugId);
+    const confirmation$ = this.alert.onDeleteConfirmation();
 
-    this.drugService.delete(drugId)
-    .subscribe({
-      next: () => {
-        this.drugs.splice(index, 1);
-        this.notification.onDeleteSuccess();
-      },
-      error: (error) => {
-        this.notification.handleError('Failed to delete drug.', error);
+    confirmation$.subscribe({
+      next: (result) => {
+        if(result) {
+          const index = this.drugs.map(drug => drug.id).indexOf(drugId);
+
+          this.drugService.delete(drugId)
+          .subscribe({
+            next: () => {
+              this.drugs.splice(index, 1);
+              this.notification.onDeleteSuccess();
+            },
+            error: (error) => {
+              this.notification.handleError('Failed to delete drug.', error);
+            }
+          });
+        }
       }
     });
   }
@@ -357,16 +385,24 @@ export class EncountersComponent implements OnInit {
   }
 
   deleteAdvice(adviceId: number) {
-    const index = this.advices.map(advice => advice.id).indexOf(adviceId);
+    const confirmation$ = this.alert.onDeleteConfirmation();
 
-    this.adviceService.delete(adviceId)
-    .subscribe({
-      next: () => {
-        this.advices.splice(index, 1);
-        this.notification.onDeleteSuccess();
-      },
-      error: (error) => {
-        this.notification.handleError('Failed to delete advice.', error);
+    confirmation$.subscribe({
+      next: (result) => {
+        if(result) {
+          const index = this.advices.map(advice => advice.id).indexOf(adviceId);
+
+          this.adviceService.delete(adviceId)
+          .subscribe({
+            next: () => {
+              this.advices.splice(index, 1);
+              this.notification.onDeleteSuccess();
+            },
+            error: (error) => {
+              this.notification.handleError('Failed to delete advice.', error);
+            }
+          });
+        }
       }
     });
   }

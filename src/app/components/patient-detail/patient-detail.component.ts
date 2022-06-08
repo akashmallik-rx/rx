@@ -7,6 +7,7 @@ import { Patient } from 'src/app/models/patient';
 import { CustomDatePipe } from 'src/app/pipes/custom-date.pipe';
 import { EncounterService } from 'src/app/services/encounter.service';
 import { PatientService } from 'src/app/services/patient.service';
+import { AlertService } from 'src/app/utils/alert.service';
 import { NotificationService } from 'src/app/utils/notification.service';
 
 export interface Visit {
@@ -32,7 +33,8 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    public notification: NotificationService,
+    private notification: NotificationService,
+    private alert: AlertService,
     public datepipe: CustomDatePipe,
     private route: ActivatedRoute,
     private patientService: PatientService,
@@ -72,18 +74,26 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteEncounter(encounterId: number) {
-    const index = this.encounterDataSource.data.map(encounter => encounter.id).indexOf(encounterId);
+  async deleteEncounter(encounterId: number) {
+    const confirmation$ = this.alert.onDeleteConfirmation();
 
-    this.encounterService.delete(encounterId)
-    .subscribe({
-      next: () => {
-        this.encounterDataSource.data.splice(index, 1);
-        this.encounterDataSource._updateChangeSubscription();
-        this.notification.onDeleteSuccess();
-      },
-      error: (error) => {
-        this.notification.handleError('Failed to delete encounter.', error);
+    confirmation$.subscribe({
+      next: (result) => {
+        if(result) {
+          const index = this.encounterDataSource.data.map(encounter => encounter.id).indexOf(encounterId);
+
+          this.encounterService.delete(encounterId)
+          .subscribe({
+            next: () => {
+              this.encounterDataSource.data.splice(index, 1);
+              this.encounterDataSource._updateChangeSubscription();
+              this.notification.onDeleteSuccess();
+            },
+            error: (error) => {
+              this.notification.handleError('Failed to delete encounter.', error);
+            }
+          });
+        }
       }
     });
   }

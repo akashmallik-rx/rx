@@ -15,6 +15,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,6 +30,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
+import { AlertComponent } from './components/common/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
     EncountersComponent,
     PatientComponent,
     CustomDatePipe,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
+    MatDialogModule,
     MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
