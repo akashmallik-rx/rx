@@ -74,10 +74,10 @@ export class EncountersComponent implements OnInit {
       this.fatchAllData();
     });
 
-    this.drugForm.valueChanges.subscribe(value => {
+    this.drugForm.controls["medicine"].valueChanges.subscribe(value => {
       let medicineTypes: number[] = [];
 
-      const medicine = this.medicines.find(medicine => medicine.id == value.medicine);
+      const medicine = this.medicines.find(medicine => medicine.name == value);
       if (medicine) {
         medicineTypes = medicine.types;
       }
@@ -85,16 +85,19 @@ export class EncountersComponent implements OnInit {
         medicinePower => medicineTypes.includes(medicinePower.type));
     });
 
-    this.filteredOptions = this.drugForm.get('medicine')!.valueChanges.pipe(
+    this.filteredOptions = this.drugForm.controls["medicine"].valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
   }
 
   private _filter(value: string): Medicine[] {
+    if (value == undefined) {
+      return []
+    }
     const filterValue = value.toString().toLowerCase();
 
-    return this.medicines.filter(medicine => medicine.name.toLowerCase().includes(filterValue));;
+    return this.medicines.filter(medicine => medicine.name.toLowerCase().includes(filterValue));
   }
 
   // loadData() : void {
@@ -268,7 +271,8 @@ export class EncountersComponent implements OnInit {
 
   addDrug(payload: any) {
     const formData: FormData = new FormData();
-    formData.append('medicine', payload.medicine);
+    const medicine = this.medicines.find(medicine => medicine.name == payload.medicine)!;
+    formData.append('medicine', medicine.id.toString());
     formData.append('power', payload.power);
     formData.append('dosage', payload.dosage);
     formData.append('instruction', payload.instruction);
@@ -282,6 +286,7 @@ export class EncountersComponent implements OnInit {
       this.drugService.update(drugId, formData)
       .subscribe({
         next: (response) => {
+          response.medicine = medicine;
           this.drugs.splice(index, 1, response);
           this.notification.onUpdateSuccess();
         },
@@ -293,6 +298,7 @@ export class EncountersComponent implements OnInit {
       this.drugService.create(formData)
       .subscribe({
         next: (response) => {
+          response.medicine = medicine;
           this.drugs.splice(this.drugs.length, 0 , response);
           this.notification.onCreateSuccess();
         },
