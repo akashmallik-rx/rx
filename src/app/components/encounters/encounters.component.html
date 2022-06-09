@@ -1,4 +1,4 @@
-<div class="mat-breadcrumb">
+<div class="mat-breadcrumb d-print-none">
   <a mat-button routerLink="/" class="mat-breadcrumb-item">Home</a> / <a mat-button routerLink="/patients/{{patientId}}" class="mat-breadcrumb-item">{{ patient.name }}</a> / <button mat-button class="mat-breadcrumb-item" disabled>Encounters</button>
 </div>
 
@@ -136,21 +136,15 @@
           </mat-form-field>
           <mat-form-field class="mat-form-field" appearance="outline">
             <mat-label>Medicine</mat-label>
-            <input type="text" placeholder="Pick one" aria-label="Medicine" matInput formControlName="medicine"
+            <input type="text" [(ngModel)]="selctedDrug.medicine" placeholder="Pick one" aria-label="Medicine" matInput formControlName="medicine"
               [matAutocomplete]="auto">
-
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-              <mat-option *ngFor="let medicine of filteredOptions | async" [value]="medicine.id">
+              <mat-option *ngFor="let medicine of filteredOptions | async" [value]="medicine.name">
                 {{medicine.name}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <!-- <mat-form-field class="mat-form-field">
-                        <mat-label>Medicine</mat-label>
-                        <mat-select [(ngModel)]="selctedDrug.medicine" formControlName="medicine" required>
-                            <mat-option *ngFor="let medicine of medicines" [value]="medicine.id" selected>{{medicine.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
+         
           <mat-form-field  appearance="outline">
             <mat-label>Power</mat-label>
             <mat-select [(ngModel)]="selctedDrug.power" formControlName="power" required>
@@ -179,9 +173,9 @@
           <mat-list-item *ngFor="let drug of drugs">
             <h4 matLine>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})
             </h4>
-            <button class="me-2" mat-icon-button color="primary" (click)="editDrug(drug.id);">
+            <!-- <button class="me-2" mat-icon-button color="primary" (click)="editDrug(drug.id);">
               <i class="material-icons">edit</i>
-            </button>
+            </button> -->
             <button mat-icon-button color="warn" (click)="deleteDrug(drug.id);">
               <i class="material-icons">delete</i>
             </button>
@@ -238,36 +232,34 @@
                 <strong>Website:</strong> www.maahomeo.com
               </div>
             </div>
-            <mat-divider></mat-divider>
+            <hr>
             <div *ngIf="patient">
-              <h3 class="text-center">Patient: <strong>{{ patient.name }}</strong></h3>
+              <h4>Patient: <span class="text-bold">{{ patient.name }}</span></h4>
               <div class="row align-items-middle">
                 <div class="col-9">
-                  <strong>Sex:</strong> {{ patient.sex }} <strong>Age:</strong> {{ patient.age }}
-                  <strong>Blood Group:</strong> {{ patient.blood_group }} <br>
-                  <strong>Phone:</strong> {{ patient.phone }} <strong>Email:</strong> {{ patient.email }} <br>
-                  <strong>Address:</strong> {{ patient.address }}
+                  <span>Sex:</span> {{ patient.sex }} <span>Age:</span> {{ patient.age }}
+                  <span>Blood Group:</span> {{ patient.blood_group }} <br>
+                  <span>Phone:</span> {{ patient.phone }} <span>Email:</span> {{ patient.email }} <br>
+                  <span>Address:</span> {{ patient.address }}
                 </div>
                 <div class="col-3">
-                  <strong>Encounter Id: </strong> {{ selectedEncounter.id }}
-                  <!-- <qrcode qrdata="1" [size]="30" [level]="'L'"></qrcode> -->
-                  <br>
-                  <strong>Date: </strong> {{ selectedEncounter.date }}
+                  <span>Encounter Id:</span> {{ selectedEncounter.id }} <br>
+                  <span>Date:</span> {{ selectedEncounter.date }}
                 </div>
               </div>
             </div>
-            <mat-divider></mat-divider>
+            <hr>
             <div class="row">
               <div class="col-4">
                 <h4>Symptoms</h4>
-                <mat-divider></mat-divider>
+                <hr>
                 <ul>
                   <li *ngFor="let symptom of symptoms">
                     {{ symptom.symptom }}
                   </li>
                 </ul>
                 <h4>General Info</h4>
-                <mat-divider></mat-divider>
+                <hr>
                 <ul>
                   <li>Pulse: {{ examination.pulse }}</li>
                   <li>B.P.: {{ examination.bp }}</li>
@@ -277,7 +269,7 @@
                   <li>Lifestyle: {{ examination.lifestyle }}</li>
                 </ul>
                 <h4>Advices</h4>
-                <mat-divider></mat-divider>
+                <hr>
                 <ul>
                   <li *ngFor="let advice of advices">
                     {{ advice.advice }}
@@ -287,7 +279,7 @@
               </div>
               <div class="col-8">
                 <h4>Medicines</h4>
-                <mat-divider></mat-divider>
+                <hr>
                 <ul *ngFor="let drug of drugs">
                   <li>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})</li>
                 </ul>
