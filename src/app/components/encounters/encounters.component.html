@@ -217,34 +217,34 @@
 
       <mat-tab label="Prescription">
         <mat-card #print>
-          <mat-card-content>
+          <mat-card-content class="print">
             <div class="row">
-              <div class="col-8">
-                <strong class="text-capitalize">DR: SAGAR MALLIK</strong> <br>
-                <strong>DHMS</strong> <br>
-                Stength: General <br>
-                Reg. No.- 55065
+              <div class="col-7">
+                <div><span class="title">Dr. {{ doctor.name }}</span></div>
+                <div *ngIf="doctor.designation"><span>{{ doctor.designation }}</span></div>
+                <div *ngIf="doctor.stength"><span>Stength:</span> {{ doctor.stength}}</div>
+                <div *ngIf="doctor.registrationNumber"><span>Reg. No.:</span> {{ doctor.registrationNumber }}</div>
               </div>
-              <div class="col-4">
-                <strong>Maa Homeo Pharmacy</strong> <br>
-                <strong>Phone:</strong> +88 01777-334628 <br>
-                <strong>Email:</strong> info@maahomeo.com <br>
-                <strong>Website:</strong> www.maahomeo.com
+              <div class="col-5">
+                <div><span class="title">{{ pharmacy.name }}</span></div>
+                <div *ngIf="pharmacy.phone"><span>Phone:</span> {{ pharmacy.phone }}</div>
+                <div *ngIf="pharmacy.email"><span>Email:</span> {{ pharmacy.email }}</div>
+                <div *ngIf="pharmacy.website"><span>Website:</span> {{ pharmacy.website }}</div>
+                <div *ngIf="pharmacy.address"><span>Address:</span> {{ pharmacy.address }}</div>
               </div>
             </div>
             <hr>
             <div *ngIf="patient">
-              <h4>Patient: <span class="text-bold">{{ patient.name }}</span></h4>
               <div class="row align-items-middle">
-                <div class="col-9">
-                  <span>Sex:</span> {{ patient.sex }} <span>Age:</span> {{ patient.age }}
-                  <span>Blood Group:</span> {{ patient.blood_group }} <br>
-                  <span>Phone:</span> {{ patient.phone }} <span>Email:</span> {{ patient.email }} <br>
-                  <span>Address:</span> {{ patient.address }}
+                <div class="col-8">
+                  <div><span class="title">Patient: {{ patient.name }}</span></div>
+                  <div><span>Sex:</span> {{ patient.sex }}, <span>Age:</span> {{ patient.age }}, <span>Blood Group:</span> {{ patient.blood_group }}</div>
+                  <div><span>Phone:</span> {{ patient.phone }}, <span>Email:</span> {{ patient.email }}</div>
+                  <div><span>Address:</span> {{ patient.address }}</div>
                 </div>
-                <div class="col-3">
-                  <span>Encounter Id:</span> {{ selectedEncounter.id }} <br>
-                  <span>Date:</span> {{ selectedEncounter.date }}
+                <div class="col-4">
+                  <div><span>Encounter Id:</span> {{ selectedEncounter.id }}</div>
+                  <div><span>Date:</span> {{ selectedEncounter.date| date:'fullDate' }}</div>
                 </div>
               </div>
             </div>
@@ -260,14 +260,14 @@
                 </ul>
                 <h4>General Info</h4>
                 <hr>
-                <ul>
-                  <li>Pulse: {{ examination.pulse }}</li>
-                  <li>B.P.: {{ examination.bp }}</li>
-                  <li>Temp: {{ examination.temp }}</li>
-                  <li>Resp rate: {{ examination.resp_rate }}</li>
-                  <li>Height: {{ examination.height }}</li>
-                  <li>Lifestyle: {{ examination.lifestyle }}</li>
-                </ul>
+                <div>
+                  <div><span>Pulse:</span> {{ examination.pulse }}</div>
+                  <div><span>B.P.:</span> {{ examination.bp }}</div>
+                  <div><span>Temp:</span> {{ examination.temp }}</div>
+                  <div><span>Resp rate:</span> {{ examination.resp_rate }}</div>
+                  <div><span>Height:</span> {{ examination.height }}</div>
+                  <div><span>Lifestyle:</span> {{ examination.lifestyle }}</div>
+                </div>
                 <h4>Advices</h4>
                 <hr>
                 <ul>
@@ -280,9 +280,9 @@
               <div class="col-8">
                 <h4>Medicines</h4>
                 <hr>
-                <ul *ngFor="let drug of drugs">
+                <ol *ngFor="let drug of drugs">
                   <li>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})</li>
-                </ul>
+                </ol>
               </div>
             </div>
           </mat-card-content>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
+import { DOCTOR_DATA } from 'src/app/data/doctor';
+import { PHARMACY_DATA } from 'src/app/data/pharmacy';
 import { Advice } from 'src/app/models/advice';
 import { Drug } from 'src/app/models/drug';
 import { Encounter } from 'src/app/models/encounter';
@@ -42,6 +44,8 @@ export class EncountersComponent implements OnInit {
   medicines: Medicine[] = [];
   medicinePowers: MedicinePower[] = [];
   filteredmedicinePowers: MedicinePower[] = [];
+  doctor = DOCTOR_DATA;
+  pharmacy = PHARMACY_DATA;
 
   drugForm = new FormGroup({
     id: new FormControl(''),
