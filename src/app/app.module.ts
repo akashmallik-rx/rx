@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { AlertComponent } from './components/common/alert/alert.component';
@@ -63,6 +64,7 @@ import { AlertComponent } from './components/common/alert/alert.component';
     MatSelectModule,
     MatSnackBarModule,
     MatTableModule,
+    MatToolbarModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatTabsModule
