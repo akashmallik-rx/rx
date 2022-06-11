@@ -5,7 +5,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService {
+export class NotificationUtil {
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
@@ -30,14 +30,19 @@ export class NotificationService {
     this.onSuccess('Successfully Deleted.');
   }
 
-  public handleError(message: string, error: any) {
-    Object.keys(error.error).map((key,_) => {
-      error.error[key].forEach( (message: string) => {
-        console.log(message);
-        this._openSnackBar(`${this._titleCasePipe.transform(key)}: ${message}`, 'ERROR');
-      });
-    });
+  public handleError(message: string, response: any) {
     // this._openSnackBar(message, 'Error');
+    const error = response.error;
+
+    Object.entries(error).map(([key, value], _) => {
+      if (Array.isArray(value)) {
+        value.forEach((errorDetail: string) => {
+          this._openSnackBar(`${this._titleCasePipe.transform(key)}: ${errorDetail}`, 'ERROR');
+        });
+      } else {
+        this._openSnackBar(`${this._titleCasePipe.transform(key)}: ${value}`, 'ERROR');
+      }
+    });
   }
 
   private _openSnackBar(message: string, label: string) {

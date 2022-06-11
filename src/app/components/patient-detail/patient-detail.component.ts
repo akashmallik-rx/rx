@@ -7,8 +7,8 @@ import { Patient } from 'src/app/models/patient';
 import { CustomDatePipe } from 'src/app/pipes/custom-date.pipe';
 import { EncounterService } from 'src/app/services/encounter.service';
 import { PatientService } from 'src/app/services/patient.service';
-import { AlertService } from 'src/app/utils/alert.service';
-import { NotificationService } from 'src/app/utils/notification.service';
+import { AlertUtil } from 'src/app/utils/alert.util';
+import { NotificationUtil } from 'src/app/utils/notification.util';
 
 export interface Visit {
   key: string;
@@ -33,8 +33,8 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private notification: NotificationService,
-    private alert: AlertService,
+    private notification: NotificationUtil,
+    private alert: AlertUtil,
     public datepipe: CustomDatePipe,
     private route: ActivatedRoute,
     private patientService: PatientService,
