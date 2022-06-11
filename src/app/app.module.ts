@@ -41,7 +41,7 @@ Sentry.init({
   dsn: environment.sentrySecret,
   integrations: [
     new BrowserTracing({
-      tracingOrigins: ["localhost", "https://akashmallik.github.io/rx"],
+      tracingOrigins: ["https://akashmallik.github.io/rx"],
       routingInstrumentation: Sentry.routingInstrumentation,
     }),
   ],
