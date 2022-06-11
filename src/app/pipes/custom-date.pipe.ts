@@ -7,11 +7,7 @@ export class CustomDatePipe implements PipeTransform {
   constructor(private datePipe: DatePipe) {}
 
   transform(value: number): string {
-    const date = this.datePipe.transform(value, "yyyy-MM-dd");
-    if (date) {
-      return date;
-    }
-    return "";
+    return this.datePipe.transform(value, "yyyy-MM-dd")!;
   }
 
 }

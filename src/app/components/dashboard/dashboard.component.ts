@@ -3,8 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Patient } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
-import { AlertService } from 'src/app/utils/alert.service';
-import { NotificationService } from 'src/app/utils/notification.service';
+import { AlertUtil } from 'src/app/utils/alert.util';
+import { NotificationUtil } from 'src/app/utils/notification.util';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,8 +20,8 @@ export class DashboardComponent implements OnInit {
   paginator!: MatPaginator;
 
   constructor(
-    private notification: NotificationService,
-    private alert: AlertService,
+    private notification: NotificationUtil,
+    private alert: AlertUtil,
     private patientService: PatientService,
   ) { }
 

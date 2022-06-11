@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Patient, PatientFormGroup } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
-import { NotificationService } from 'src/app/utils/notification.service';
+import { NotificationUtil } from 'src/app/utils/notification.util';
 
 export interface Sex {
   key: string;
@@ -45,14 +45,14 @@ export class PatientComponent implements OnInit {
   patientForm: PatientFormGroup;
 
   constructor(
-    private notification: NotificationService,
+    private notification: NotificationUtil,
     private patientService: PatientService,
     private formBuilder: FormBuilder,
     private router: Router) {
       this.patientForm = this.formBuilder.group({
         id: [''],
         name: ['', Validators.required],
-        age: [null, Validators.compose([ Validators.required, Validators.min(0)])],
+        age: [null, Validators.compose([Validators.required, Validators.min(0)])],
         sex: ['', Validators.required],
         blood_group: [''],
         phone: ['', Validators.pattern(/(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/)],

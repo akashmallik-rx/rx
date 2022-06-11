@@ -20,8 +20,8 @@ import { MedicinePowerService } from 'src/app/services/medicine-power.service';
 import { MedicineService } from 'src/app/services/medicine.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { SymptomService } from 'src/app/services/symptom.service';
-import { AlertService } from 'src/app/utils/alert.service';
-import { NotificationService } from 'src/app/utils/notification.service';
+import { AlertUtil } from 'src/app/utils/alert.util';
+import { NotificationUtil } from 'src/app/utils/notification.util';
 
 @Component({
   selector: 'app-encounters',
@@ -58,8 +58,8 @@ export class EncountersComponent implements OnInit {
   filteredOptions!: Observable<Medicine[]>;
 
   constructor(
-    private notification: NotificationService,
-    private alert: AlertService,
+    private notification: NotificationUtil,
+    private alert: AlertUtil,
     private adviceService: AdviceService,
     private drugService: DrugService,
     private encounterService: EncounterService,

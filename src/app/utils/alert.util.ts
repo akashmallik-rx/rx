@@ -5,7 +5,7 @@ import { AlertComponent } from '../components/common/alert/alert.component';
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService {
+export class AlertUtil {
   constructor(public _dialog: MatDialog) { }
 
   public onDeleteConfirmation() {
