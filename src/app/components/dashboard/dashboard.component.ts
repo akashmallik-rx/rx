@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
     .subscribe(
       {
         next: (response) => {
-          console.log(response);
           this.dataSource = new MatTableDataSource<Patient>(response);
           this.dataSource.paginator = this.paginator;
           this.dataSource._updateChangeSubscription();

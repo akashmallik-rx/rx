@@ -2,27 +2,26 @@
   <div class="col-md-8">
     <mat-card *ngIf="patient">
       <mat-card-content>
-        <form #patientForm="ngForm" class="mat-form" (ngSubmit)="save(patientForm.value)">
-          <div class="row">
-            <div class="col-md-8">
-              <mat-form-field class="mat-form-field">
-                <input matInput [(ngModel)]="patient.name" #name="ngModel" name="name" placeholder="Patient Name" required>
-                <mat-error *ngIf="name.touched && name.invalid">The <strong>name</strong> field is required.</mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-md-4">
-              <mat-form-field class="mat-form-field">
-                <input matInput [(ngModel)]="patient.age" #age="ngModel" name="age" placeholder="Age" type="number" required>
-                <mat-error *ngIf="age.touched && age.invalid">The <strong>age</strong> field is required.</mat-error>
-              </mat-form-field>
-            </div>
+        <form [formGroup]="patientForm" class="mat-form" (ngSubmit)="save()">
+          <div>
+            <mat-form-field class="mat-form-field">
+              <input matInput [(ngModel)]="patient.name" formControlName="name" placeholder="Patient Name">
+              <!-- <mat-error *ngIf="name.touched && name.invalid">The <strong>name</strong> field is required.</mat-error> -->
+            </mat-form-field>
           </div>
 
           <div class="row">
             <div class="col-md-4">
               <mat-form-field class="mat-form-field">
+                <mat-label>Age</mat-label>
+                <input matInput [(ngModel)]="patient.age" formControlName="age" placeholder="Age" type="number">
+                <!-- <mat-error *ngIf="age.touched && age.invalid">The <strong>age</strong> field is required.</mat-error> -->
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="mat-form-field">
                 <mat-label>Sex</mat-label>
-                <mat-select [(ngModel)]="patient.sex" name="sex" required>
+                <mat-select [(ngModel)]="patient.sex" formControlName="sex">
                   <mat-option *ngFor="let sex of sexList" [value]="sex.key">{{ sex.value }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -30,36 +29,32 @@
             <div class="col-md-4">
               <mat-form-field class="mat-form-field">
                 <mat-label>Blood Group</mat-label>
-                <mat-select [(ngModel)]="patient.blood_group" name="blood_group">
+                <mat-select [(ngModel)]="patient.blood_group" formControlName="blood_group">
                   <mat-option *ngFor="let blood of bloodGroup" [value]="blood.key">{{ blood.value }}</mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
-            <div class="col-md-4">
-              <div class="mat-form-field">
-                <input ngModel name="avatar" (change)="onFileSelected($event)" placeholder="Avatar" type="file">
-              </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6">
               <mat-form-field class="mat-form-field">
-                <input matInput [(ngModel)]="patient.phone" #phone="ngModel" name="phone" placeholder="Phone" required>
-                <mat-error *ngIf="phone.touched && phone.invalid">The <strong>phone</strong> field is required.</mat-error>
+                <input matInput [(ngModel)]="patient.phone" formControlName="phone" placeholder="Phone">
+                <!-- <mat-error *ngIf="phone.touched && phone.invalid">The <strong>phone</strong> field is required.</mat-error> -->
                 <!-- <mat-error *ngIf="phone.errors?.phone">error message</mat-error> -->
               </mat-form-field>
             </div>
             <div class="col-md-6">
               <mat-form-field class="mat-form-field">
-                <input matInput [(ngModel)]="patient.email" #email="ngModel" name="email" placeholder="Email" email>
+                <mat-label>Email</mat-label>
+                <input matInput [(ngModel)]="patient.email" formControlName="email">
                 <!-- <mat-error *ngIf="email.errors?.email">Please enter a valid email.</mat-error> -->
               </mat-form-field>
             </div>
           </div>
           
           <mat-form-field class="mat-form-field">
-            <textarea matInput [(ngModel)]="patient.address" name="address" placeholder="Address"></textarea>
+            <textarea matInput [(ngModel)]="patient.address" formControlName="address" placeholder="Address"></textarea>
           </mat-form-field>
     
           <button mat-raised-button [disabled]="patientForm.invalid" color="primary">Submit</button>
@@ -71,18 +66,15 @@
   <div class="col-md-4">
     <mat-card *ngIf="patient">
       <mat-card-header>
-        <!-- <div mat-card-avatar [ngStyle]="{ 'background-image': 'url(' + patient.avatar + ')', 'background-size': 'cover'}"></div> -->
-        <mat-card-title>{{ patient.name }}</mat-card-title>
-        <mat-card-subtitle>
-          <strong>Sex:</strong> {{ patient.sex }} <strong>Age:</strong> {{ patient.age }}
-        </mat-card-subtitle>
+        <mat-card-title *ngIf="patient.name">{{ patient.name }}</mat-card-title>
       </mat-card-header>
-      <img mat-card-image [src]="patient.avatar" alt="{{ patient.name }}">
       <mat-card-content>
-        <strong>Blood Group:</strong> {{ patient.blood_group }} <br>
-        <strong>Phone:</strong> {{ patient.phone }} <br>
-        <strong>Email:</strong> {{ patient.email }} <br>
-        <strong>Address:</strong> {{ patient.address }}
+        <div *ngIf="patient.age"><span>Age:</span> {{ patient.age }}</div>
+        <div *ngIf="patient.sex"><span>Sex:</span> {{ patient.sex }}</div>
+        <div *ngIf="patient.blood_group"><span>Blood Group:</span> {{ patient.blood_group }}</div>
+        <div *ngIf="patient.phone"><span>Phone:</span> {{ patient.phone }}</div>
+        <div *ngIf="patient.email"><span>Email:</span> {{ patient.email }}</div>
+        <div *ngIf="patient.address"><span>Address:</span> {{ patient.address }}</div>
       </mat-card-content>
     </mat-card>
   </div>

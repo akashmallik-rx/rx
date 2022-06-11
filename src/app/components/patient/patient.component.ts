@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Patient } from 'src/app/models/patient';
+import { Patient, PatientFormGroup } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
 import { NotificationService } from 'src/app/utils/notification.service';
 
@@ -41,10 +42,26 @@ export class PatientComponent implements OnInit {
     { key: 'O-', value: 'O-'},
   ];
 
+  patientForm: PatientFormGroup;
+
   constructor(
     private notification: NotificationService,
     private patientService: PatientService,
-    private router: Router) { }
+    private formBuilder: FormBuilder,
+    private router: Router) {
+      this.patientForm = this.formBuilder.group({
+        id: [''],
+        name: ['', Validators.required],
+        age: [null, Validators.compose([ Validators.required, Validators.min(0)])],
+        sex: ['', Validators.required],
+        blood_group: [''],
+        phone: ['', Validators.pattern(/(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/)],
+        email: ['', Validators.email],
+        address: [''],
+        avatar: [null],
+        encounters: ['']
+      }) as PatientFormGroup;
+    }
 
   ngOnInit(): void {
   }
@@ -53,42 +70,16 @@ export class PatientComponent implements OnInit {
     this.fileToUpload = event.target.files[0];
   }
 
-  save(payload: any) {
-    const formData: FormData = new FormData();
-    formData.append('name', payload.name);
-    formData.append('age', payload.age);
-    formData.append('sex', payload.sex);
-    formData.append('blood_group', payload.blood_group);
-    formData.append('phone', payload.phone);
-    formData.append('email', payload.email);
-    formData.append('address', payload.address);
-    
-    if (this.fileToUpload) {
-      formData.append('avatar', this.fileToUpload, this.fileToUpload.name);
-    }
-
-    if (this.patientId) {
-      this.patientService.update(this.patientId, formData)
-      .subscribe({
-        next: () => {
-          this.notification.onUpdateSuccess();
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          this.notification.handleError('Failed to update patient data.', error);
-        }
-      });
-    } else {
-      this.patientService.create(formData)
-      .subscribe({
-        next: () => {
-          this.notification.onCreateSuccess();
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          this.notification.handleError('Failed to add patient data.', error);
-        }
-      });
-    }    
+  save() {
+    this.patientService.create(this.patientForm.value)
+    .subscribe({
+      next: () => {
+        this.notification.onCreateSuccess();
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.notification.handleError('Failed to add patient data.', error);
+      }
+    });
   }
 }
