@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,6 +32,25 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { AlertComponent } from './components/common/alert/alert.component';
+import { Router } from '@angular/router';
+import * as Sentry from '@sentry/angular';
+import { BrowserTracing } from '@sentry/tracing';
+import { environment } from 'src/environments/environment';
+
+Sentry.init({
+  dsn: environment.sentrySecret,
+  integrations: [
+    new BrowserTracing({
+      tracingOrigins: ["https://akashmallik.github.io/rx"],
+      routingInstrumentation: Sentry.routingInstrumentation,
+    }),
+  ],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 @NgModule({
   declarations: [
@@ -70,6 +89,22 @@ import { AlertComponent } from './components/common/alert/alert.component';
     MatTabsModule
   ],
   providers: [
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: true,
+      }),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
     DatePipe,
     CustomDatePipe,
     TitleCasePipe
