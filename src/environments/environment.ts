@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://127.0.0.1:8000/api'
+  apiUrl: 'http://127.0.0.1:8000/api',
+  sentrySecret: "https://ca67deea40a843888c644c7ebd5fb5d8@o1284247.ingest.sentry.io/6494917"
 };
 
 /*
