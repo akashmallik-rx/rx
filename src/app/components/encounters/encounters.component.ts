@@ -7,7 +7,7 @@ import { PHARMACY_DATA } from 'src/app/data/pharmacy';
 import { Advice } from 'src/app/models/advice';
 import { Drug } from 'src/app/models/drug';
 import { Encounter } from 'src/app/models/encounter';
-import { Examination } from 'src/app/models/examination';
+import { GeneralExamination } from 'src/app/models/general-examination';
 import { Medicine } from 'src/app/models/medicine';
 import { MedicinePower } from 'src/app/models/medicine-power';
 import { Patient } from 'src/app/models/patient';
@@ -15,7 +15,7 @@ import { Symptom } from 'src/app/models/symptom';
 import { AdviceService } from 'src/app/services/advice.service';
 import { DrugService } from 'src/app/services/drug.service';
 import { EncounterService } from 'src/app/services/encounter.service';
-import { ExaminationService } from 'src/app/services/examination.service';
+import { GeneralExaminationService } from 'src/app/services/general-examination.service';
 import { MedicinePowerService } from 'src/app/services/medicine-power.service';
 import { MedicineService } from 'src/app/services/medicine.service';
 import { PatientService } from 'src/app/services/patient.service';
@@ -36,7 +36,7 @@ export class EncountersComponent implements OnInit {
   encounters: Encounter[] = [];
   selectedSymptom: Symptom = <Symptom>{};
   symptoms: Symptom[] = [];
-  examination: Examination = <Examination>{};
+  generalExamination: GeneralExamination = <GeneralExamination>{};
   selctedDrug: Drug = <Drug>{};
   drugs: Drug[] = [];
   selectedAdvice: Advice = <Advice>{};
@@ -54,6 +54,16 @@ export class EncountersComponent implements OnInit {
     dosage: new FormControl(''),
     instruction: new FormControl(''),
   });
+
+  generalExaminationForm = new FormGroup({
+    id: new FormControl(''),
+    encounter: new FormControl(''),
+    pulse: new FormControl(''),
+    bp: new FormControl(''),
+    temp: new FormControl(''),
+    height: new FormControl(''),
+    lifestyle: new FormControl('')
+  });
   
   filteredOptions!: Observable<Medicine[]>;
 
@@ -63,7 +73,7 @@ export class EncountersComponent implements OnInit {
     private adviceService: AdviceService,
     private drugService: DrugService,
     private encounterService: EncounterService,
-    private examinationService: ExaminationService,
+    private examinationService: GeneralExaminationService,
     private medicineService: MedicineService,
     private patientService: PatientService,
     private medicinePowerService: MedicinePowerService,
@@ -131,11 +141,11 @@ export class EncountersComponent implements OnInit {
       next: (response) => {
         this.selectedEncounter = response;
         this.symptoms = response['symptoms']
-        const examination = response['examination'];
-        if (examination) {
-          this.examination = examination;
+        const generalExamination = response['examination'];
+        if (generalExamination) {
+          this.generalExamination = generalExamination;
         } else {
-          this.examination = <Examination>{};
+          this.generalExamination = <GeneralExamination>{};
         }
         this.drugs = response['drugs'];
         this.advices = response['advices'];
@@ -235,39 +245,29 @@ export class EncountersComponent implements OnInit {
     });
   }
 
-  updateExamination(payload: any)  {
-    const formData: FormData = new FormData();
-    formData.append('pulse', payload.pulse);
-    formData.append('bp', payload.bp);
-    formData.append('temp', payload.temp);
-    formData.append('resp_rate', payload.resp_rate);
-    formData.append('height', payload.height);
-    formData.append('lifestyle', payload.lifestyle);
-    formData.append('encounter', this.encounterId.toString());
-
-    const examinationId = payload.id
-    if (examinationId) {
-      formData.append('id', examinationId);
-      
-      this.examinationService.update(examinationId, formData)
+  saveGeneralExamination()  {
+    this.generalExaminationForm.controls["encounter"].setValue(this.encounterId.toString());
+    const examinationId = this.generalExaminationForm.controls["id"].value;
+    if (examinationId) {      
+      this.examinationService.update(examinationId, this.generalExaminationForm.value)
       .subscribe({
         next: (response) => {
-          this.examination = response;
+          this.generalExamination = response;
           this.notification.onUpdateSuccess();
         },
         error: (error) => {
-          this.notification.handleError('Failed to update examination data.', error);
+          this.notification.handleError('Failed to update general examination data.', error);
         }
       });
     } else {
-      this.examinationService.create(formData)
+      this.examinationService.create(this.generalExaminationForm.value)
       .subscribe({
         next: (response) => {
-          this.examination = response;
+          this.generalExamination = response;
           this.notification.onCreateSuccess();
         },
         error: (error) => {
-          this.notification.handleError('Failed to create examination.', error);
+          this.notification.handleError('Failed to create general examination.', error);
         }
       });
     }
