@@ -47,24 +47,17 @@
   <div class="col-md-9">
     <mat-tab-group>
       <mat-tab label="C/C">
-        <form class="mat-form mb-3" #symptomForm="ngForm"
-          (ngSubmit)="addSymptom(symptomForm.value); symptomForm.reset();">
-          
+        <form class="mat-form mb-3" [formGroup]="symptomForm" (ngSubmit)="addSymptom(); symptomForm.reset(); symptomForm.markAsUntouched();">
           <mat-form-field class="mat-form-field" appearance="outline" hidden>
-            <mat-label>ID</mat-label>
-            <input matInput [(ngModel)]="selectedSymptom.id" name="id">
+            <input matInput [(ngModel)]="selectedSymptom.id" formControlName="id">
           </mat-form-field>
           
           <mat-form-field class="mat-form-field" appearance="outline">
             <mat-label>Symptom</mat-label>
-            <textarea matInput [(ngModel)]="selectedSymptom.symptom" #sym="ngModel" name="symptom" required></textarea>
-            <mat-error *ngIf="sym.touched && sym.invalid">
-              The <strong>symptom</strong> field is required.
-            </mat-error>
+            <textarea matInput [(ngModel)]="selectedSymptom.symptom" formControlName="symptom"></textarea>
           </mat-form-field>
           
-          <button mat-raised-button type="button" color="warn" class="me-2"
-            (click)="symptomForm.reset();">Reset</button>
+          <button mat-raised-button type="button" color="warn" class="me-2" (click)="symptomForm.reset();">Reset</button>
           <button mat-raised-button color="primary" [disabled]="symptomForm.invalid">Save</button>
         </form>
         
@@ -73,7 +66,7 @@
         <mat-list>
           <mat-list-item *ngFor="let symptom of symptoms">
             <h4 matLine>{{ symptom.symptom }}</h4>
-            <button class="me-2" mat-icon-button color="primary" (click)="editSymptom(symptom.id);">
+            <button class="me-2" mat-icon-button color="primary" (click)="getSymptom(symptom.id);">
               <i class="material-icons">edit</i>
             </button>
             <button mat-icon-button color="warn" (click)="deleteSymptom(symptom.id);">
