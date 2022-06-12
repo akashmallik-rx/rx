@@ -1,10 +1,9 @@
-export interface Examination {
+export interface GeneralExamination {
   id: string;
   encounter: number;
   pulse: number;
   bp: string;
   temp: number;
-  resp_rate: number;
-  height: number;
+  height: string;
   lifestyle: string;
 }
