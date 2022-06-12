@@ -280,8 +280,10 @@
               <div class="col-8">
                 <h4>Medicines</h4>
                 <hr>
-                <ol *ngFor="let drug of drugs">
-                  <li>{{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})</li>
+                <ol>
+                  <li *ngFor="let drug of drugs">
+                    {{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})
+                  </li>
                 </ol>
               </div>
             </div>
