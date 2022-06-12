@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
 import { DOCTOR_DATA } from 'src/app/data/doctor';
@@ -47,12 +47,10 @@ export class EncountersComponent implements OnInit {
   doctor = DOCTOR_DATA;
   pharmacy = PHARMACY_DATA;
 
-  drugForm = new FormGroup({
+  symptomForm = new FormGroup({
     id: new FormControl(''),
-    medicine: new FormControl(''),
-    power: new FormControl(''),
-    dosage: new FormControl(''),
-    instruction: new FormControl(''),
+    encounter: new FormControl(''),
+    symptom: new FormControl('', Validators.required)
   });
 
   generalExaminationForm = new FormGroup({
@@ -63,6 +61,14 @@ export class EncountersComponent implements OnInit {
     temp: new FormControl(''),
     height: new FormControl(''),
     lifestyle: new FormControl('')
+  });
+
+  drugForm = new FormGroup({
+    id: new FormControl(''),
+    medicine: new FormControl(''),
+    power: new FormControl(''),
+    dosage: new FormControl(''),
+    instruction: new FormControl(''),
   });
   
   filteredOptions!: Observable<Medicine[]>;
@@ -176,17 +182,14 @@ export class EncountersComponent implements OnInit {
     });
   }
 
-  addSymptom(payload: any) {
-    const formData: FormData = new FormData();
-    formData.append('symptom', payload.symptom);
-    formData.append('encounter', this.encounterId.toString());
+  addSymptom() {
+    this.symptomForm.controls["encounter"].setValue(this.encounterId.toString());
+    const symptomId = this.symptomForm.controls["id"].value;
 
-    const symptomId = payload.id;
     if (symptomId) {
-      formData.append('id', symptomId);
       const index = this.symptoms.map(symptom => symptom.id).indexOf(symptomId);
       
-      this.symptomService.update(symptomId, formData)
+      this.symptomService.update(symptomId, this.symptomForm.value)
       .subscribe({
         next: (response) => {
           this.symptoms.splice(index, 1, response);
@@ -197,7 +200,7 @@ export class EncountersComponent implements OnInit {
         }
       });
     } else {
-      this.symptomService.create(formData)
+      this.symptomService.create(this.symptomForm.value)
       .subscribe({
         next: (response) => {
           this.symptoms.splice(this.symptoms.length, 0 , response);
@@ -210,7 +213,7 @@ export class EncountersComponent implements OnInit {
     }
   }
 
-  editSymptom(symptomId: number) {
+  getSymptom(symptomId: number) {
     this.symptomService.get(symptomId)
     .subscribe({
       next: (response) => {
@@ -245,7 +248,7 @@ export class EncountersComponent implements OnInit {
     });
   }
 
-  saveGeneralExamination()  {
+  saveGeneralExamination() {
     this.generalExaminationForm.controls["encounter"].setValue(this.encounterId.toString());
     const examinationId = this.generalExaminationForm.controls["id"].value;
     if (examinationId) {      
