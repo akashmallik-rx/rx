@@ -70,6 +70,12 @@ export class EncountersComponent implements OnInit {
     dosage: new FormControl(''),
     instruction: new FormControl(''),
   });
+
+  adviceForm = new FormGroup({
+    id: new FormControl(''),
+    encounter: new FormControl(''),
+    advice: new FormControl('', Validators.required)
+  });
   
   filteredOptions!: Observable<Medicine[]>;
 
@@ -351,17 +357,14 @@ export class EncountersComponent implements OnInit {
     });
   }
 
-  addAdvice(payload: any) {
-    const formData: FormData = new FormData();
-    formData.append('encounter', this.encounterId.toString());
-    formData.append('advice', payload.advice);
+  addAdvice() {
+    this.adviceForm.controls["encounter"].setValue(this.encounterId.toString());
+    const adviceId = this.adviceForm.controls["id"].value;
 
-    const adviceId = payload.id;
     if (adviceId) {
-      formData.append('id', adviceId);
       const index = this.advices.map(advice => advice.id).indexOf(adviceId);
       
-      this.adviceService.update(adviceId, formData)
+      this.adviceService.update(adviceId, this.adviceForm.value)
       .subscribe({
         next: (response) => {
           this.advices.splice(index, 1, response);
@@ -372,7 +375,7 @@ export class EncountersComponent implements OnInit {
         }
       });
     } else {
-      this.adviceService.create(formData)
+      this.adviceService.create(this.adviceForm.value)
       .subscribe({
         next: (response) => {
           this.advices.splice(this.advices.length, 0 , response);
@@ -385,7 +388,7 @@ export class EncountersComponent implements OnInit {
     }
   }
 
-  editAdvice(adviceId: number) {
+  getAdvice(adviceId: number) {
     this.adviceService.get(adviceId)
     .subscribe({
       next: (response) => {
