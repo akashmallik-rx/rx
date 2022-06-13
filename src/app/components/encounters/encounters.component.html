@@ -260,9 +260,8 @@
 
               </div>
               <div class="col-8">
-                <h4>Medicines</h4>
-                <hr>
-                <ol>
+                <span class="rx">Rx</span>
+                <ol class="ms-4 mt-3">
                   <li *ngFor="let drug of drugs">
                     {{ drug.medicine.name }} {{ drug.power.value }} ({{ drug.dosage }}, {{ drug.instruction }})
                   </li>

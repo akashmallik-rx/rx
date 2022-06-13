@@ -2,6 +2,7 @@
 // @import "~bootstrap/dist/css/bootstrap-grid.min.css";
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~bootstrap/dist/css/bootstrap-utilities.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Cookie&family=Send+Flowers&display=swap');
 
 
 html, body { height: 100%; }
@@ -50,14 +51,17 @@ table {
 .navbar-brand {
   color: #ffffff;
   text-decoration: none;
-  font-size: 2rem;
-  font-weight: bold;
-  font-family: 'Iceland', cursive;
+  font-size: 2.5rem;
+  font-family: 'Cookie', cursive;
   margin-right: auto;
+  &:hover {
+    color: #ffffff;
+  }
 }
 
 .xm {
-  font-size: .8rem;
+  font-size: 1rem;
+  // font-family: 'Send Flowers', cursive;
 }
 
 .copyright {
@@ -95,4 +99,10 @@ a.mat-breadcrumb-item {
   span.title {
     font-weight: 600;
   }
+}
+
+
+.rx {
+  font-family: 'Cookie', cursive !important;
+  font-size: 2.5rem;
 }
