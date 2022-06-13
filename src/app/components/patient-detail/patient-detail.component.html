@@ -17,9 +17,9 @@
   <div class="col-md-3">
     <mat-card>
       <mat-card-content>
-        <form #encounterForm="ngForm" (ngSubmit)="addEncounter(encounterForm.value)" class="mat-form">
+        <form class="mat-form" [formGroup]="encounterForm" (ngSubmit)="addEncounter()">
           <mat-form-field class="mat-form-field">
-            <input matInput [matDatepicker]="picker" ngModel name="date" placeholder="Choose a date">
+            <input matInput [matDatepicker]="picker" ngModel formControlName="date" placeholder="Choose a date">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -27,7 +27,7 @@
           
           <mat-form-field class="mat-form-field">
             <mat-label>Visit Type</mat-label>
-            <mat-select ngModel name="visit_type">
+            <mat-select ngModel formControlName="visit_type">
               <mat-option *ngFor="let visit of visitTypes" [value]="visit.key">{{ visit.value }}</mat-option>
             </mat-select>
           </mat-form-field>

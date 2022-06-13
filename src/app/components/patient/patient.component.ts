@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Patient, PatientFormGroup } from 'src/app/models/patient';
 import { PatientService } from 'src/app/services/patient.service';
@@ -50,15 +50,15 @@ export class PatientComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router) {
       this.patientForm = this.formBuilder.group({
-        id: [''],
-        name: ['', Validators.required],
-        age: [null, Validators.compose([Validators.required, Validators.min(0)])],
-        sex: ['', Validators.required],
-        blood_group: [''],
-        phone: ['', Validators.pattern(/(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/)],
-        email: ['', Validators.email],
-        address: [''],
-        avatar: [null],
+        id: new FormControl(''),
+        name: new FormControl('', Validators.required),
+        age: new FormControl(null, Validators.compose([Validators.required, Validators.min(0)])),
+        sex: new FormControl('', Validators.required),
+        blood_group: new FormControl(''),
+        phone: new FormControl('', Validators.pattern(/(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/)),
+        email: new FormControl('', Validators.email),
+        address: new FormControl(''),
+        avatar: new FormControl(null),
         encounters: ['']
       }) as PatientFormGroup;
     }
