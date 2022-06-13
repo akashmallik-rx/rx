@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -32,10 +33,17 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     { key: 'ODP', value: 'ODP'},
   ];
 
+  encounterForm = new FormGroup({
+    id: new FormControl(''),
+    patient: new FormControl(''),
+    visit_type: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required)
+  });
+
   constructor(
     private notification: NotificationUtil,
     private alert: AlertUtil,
-    public datepipe: CustomDatePipe,
+    private customDatepipe: CustomDatePipe,
     private route: ActivatedRoute,
     private patientService: PatientService,
     private encounterService: EncounterService
@@ -55,13 +63,12 @@ export class PatientDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  addEncounter(payload: any) {
-    const formData: FormData = new FormData();
-    formData.append('date', this.datepipe.transform(payload.date));
-    formData.append('visit_type', payload.visit_type);
-    formData.append('patient', this.patientId.toString());
+  addEncounter() {
+    const encounterDate = this.customDatepipe.transform(this.encounterForm.controls['date'].value);
+    this.encounterForm.controls['patient'].setValue(this.patientId.toString());
+    this.encounterForm.controls['date'].setValue(encounterDate);
     
-    this.encounterService.create(formData)
+    this.encounterService.create(this.encounterForm.value)
     .subscribe({
       next: (response) => {
         this.encounterDataSource.data.splice(this.encounterDataSource.data.length, 0, response);

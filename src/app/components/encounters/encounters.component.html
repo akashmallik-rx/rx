@@ -47,7 +47,7 @@
   <div class="col-md-9">
     <mat-tab-group>
       <mat-tab label="C/C">
-        <form class="mat-form mb-3" [formGroup]="symptomForm" (ngSubmit)="addSymptom(); symptomForm.reset(); symptomForm.markAsUntouched();">
+        <form class="mat-form mb-3" [formGroup]="symptomForm" (ngSubmit)="addSymptom();">
           <mat-form-field class="mat-form-field" appearance="outline" hidden>
             <input matInput [(ngModel)]="selectedSymptom.id" formControlName="id">
           </mat-form-field>
@@ -113,7 +113,7 @@
       </mat-tab>
 
       <mat-tab label="Medicine">
-        <form class="mat-form mb-3" [formGroup]="drugForm" (ngSubmit)="addDrug(drugForm.value); drugForm.reset();">
+        <form class="mat-form mb-3" [formGroup]="drugForm" (ngSubmit)="addDrug();">
           <mat-form-field class="mat-form-field" hidden>
             <input matInput [(ngModel)]="selctedDrug.id" formControlName="id">
           </mat-form-field>
@@ -130,20 +130,21 @@
          
           <mat-form-field  appearance="outline">
             <mat-label>Power</mat-label>
-            <mat-select [(ngModel)]="selctedDrug.power" formControlName="power" required>
-              <mat-option *ngFor="let power of filteredmedicinePowers" [value]="power.id" selected>{{power.value}}
+            <mat-select [(ngModel)]="selctedDrug.power" formControlName="power">
+              <mat-option *ngFor="let power of filteredmedicinePowers" [value]="power.id">
+                {{power.value}}
               </mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field class="mat-form-field" appearance="outline">
             <mat-label>Dosage</mat-label>
-            <input matInput [(ngModel)]="selctedDrug.dosage" formControlName="dosage" required>
+            <input matInput [(ngModel)]="selctedDrug.dosage" formControlName="dosage">
           </mat-form-field>
 
           <mat-form-field class="mat-form-field" appearance="outline">
             <mat-label>Instruction</mat-label>
-            <input matInput [(ngModel)]="selctedDrug.instruction" formControlName="instruction" required>
+            <input matInput [(ngModel)]="selctedDrug.instruction" formControlName="instruction">
           </mat-form-field>
 
           <button mat-raised-button type="button" color="warn" class="me-2" (click)="drugForm.reset();">Reset</button>
@@ -167,16 +168,15 @@
       </mat-tab>
 
       <mat-tab label="Advice">
-        <form class="mat-form mb-3" #adviceForm="ngForm" (ngSubmit)="addAdvice(adviceForm.value); adviceForm.reset();">
+        <form class="mat-form mb-3" [formGroup]="adviceForm" (ngSubmit)="addAdvice();">
           <mat-form-field class="mat-form-field" appearance="outline" hidden>
             <mat-label>Id.</mat-label>
-            <input matInput [(ngModel)]="selectedAdvice.id" name="id">
+            <input matInput [(ngModel)]="selectedAdvice.id" formControlName="id">
           </mat-form-field>
           
           <mat-form-field class="mat-form-field" appearance="outline">
             <mat-label>Advice</mat-label>
-            <textarea matInput [(ngModel)]="selectedAdvice.advice" #adv="ngModel" name="advice" required></textarea>
-            <mat-error *ngIf="adv.touched && adv.invalid">The <strong>advice</strong> field is required.</mat-error>
+            <textarea matInput [(ngModel)]="selectedAdvice.advice" formControlName="advice"></textarea>
           </mat-form-field>
           
           <button mat-raised-button type="button" color="warn" class="me-2" (click)="adviceForm.reset();">Reset</button>
@@ -188,7 +188,7 @@
         <mat-list>
           <mat-list-item *ngFor="let advice of advices">
             <h4 matLine>{{ advice.advice }}</h4>
-            <button mat-icon-button color="warn" (click)="editAdvice(advice.id);">
+            <button mat-icon-button color="warn" (click)="getAdvice(advice.id);">
               <i class="material-icons">edit</i>
             </button>
             <button mat-icon-button color="warn" (click)="deleteAdvice(advice.id);">

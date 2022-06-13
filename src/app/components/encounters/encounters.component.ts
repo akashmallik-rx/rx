@@ -65,10 +65,17 @@ export class EncountersComponent implements OnInit {
 
   drugForm = new FormGroup({
     id: new FormControl(''),
-    medicine: new FormControl(''),
-    power: new FormControl(''),
-    dosage: new FormControl(''),
-    instruction: new FormControl(''),
+    encounter: new FormControl(''),
+    medicine: new FormControl('', Validators.required),
+    power: new FormControl('', Validators.required),
+    dosage: new FormControl('', Validators.required),
+    instruction: new FormControl('', Validators.required)
+  });
+
+  adviceForm = new FormGroup({
+    id: new FormControl(''),
+    encounter: new FormControl(''),
+    advice: new FormControl('', Validators.required)
   });
   
   filteredOptions!: Observable<Medicine[]>;
@@ -194,6 +201,7 @@ export class EncountersComponent implements OnInit {
         next: (response) => {
           this.symptoms.splice(index, 1, response);
           this.notification.onUpdateSuccess();
+          this.symptomForm.reset();
         },
         error: (error) => {
           this.notification.handleError('Failed to update symptom data', error);
@@ -205,6 +213,7 @@ export class EncountersComponent implements OnInit {
         next: (response) => {
           this.symptoms.splice(this.symptoms.length, 0 , response);
           this.notification.onCreateSuccess();
+          this.symptomForm.reset();
         },
         error: (error) => {
           this.notification.handleError('Failed to create symptom', error);
@@ -276,38 +285,35 @@ export class EncountersComponent implements OnInit {
     }
   }
 
-  addDrug(payload: any) {
-    const formData: FormData = new FormData();
-    const medicine = this.medicines.find(medicine => medicine.name == payload.medicine)!;
-    formData.append('medicine', medicine.id.toString());
-    formData.append('power', payload.power);
-    formData.append('dosage', payload.dosage);
-    formData.append('instruction', payload.instruction);
-    formData.append('encounter', this.encounterId.toString());
+  addDrug() {
+    const medicine = this.medicines.find(medicine => medicine.name == this.drugForm.controls['medicine'].value)!;
+    this.drugForm.controls["encounter"].setValue(this.encounterId.toString());
+    this.drugForm.controls["medicine"].setValue(medicine.id.toString());
+    const drugId = this.drugForm.controls["id"].value;
 
-    const drugId = payload.id;
     if (drugId) {
-      formData.append('id', drugId);
       const index = this.drugs.map(drug => drug.id).indexOf(drugId);
       
-      this.drugService.update(drugId, formData)
+      this.drugService.update(drugId, this.drugForm.value)
       .subscribe({
         next: (response) => {
           response.medicine = medicine;
           this.drugs.splice(index, 1, response);
           this.notification.onUpdateSuccess();
+          this.drugForm.reset();
         },
         error: (error) => {
           this.notification.handleError('Failed to update drug data.', error);
         }
       });
     } else {
-      this.drugService.create(formData)
+      this.drugService.create(this.drugForm.value)
       .subscribe({
         next: (response) => {
           response.medicine = medicine;
           this.drugs.splice(this.drugs.length, 0 , response);
           this.notification.onCreateSuccess();
+          this.drugForm.reset();
         },
         error: (error) => {
           this.notification.handleError('Failed to add drug data.', error);
@@ -351,41 +357,42 @@ export class EncountersComponent implements OnInit {
     });
   }
 
-  addAdvice(payload: any) {
-    const formData: FormData = new FormData();
-    formData.append('encounter', this.encounterId.toString());
-    formData.append('advice', payload.advice);
+  addAdvice() {
+    this.adviceForm.controls["encounter"].setValue(this.encounterId.toString());
+    const adviceId = this.adviceForm.controls["id"].value;
 
-    const adviceId = payload.id;
     if (adviceId) {
-      formData.append('id', adviceId);
       const index = this.advices.map(advice => advice.id).indexOf(adviceId);
       
-      this.adviceService.update(adviceId, formData)
+      this.adviceService.update(adviceId, this.adviceForm.value)
       .subscribe({
         next: (response) => {
           this.advices.splice(index, 1, response);
           this.notification.onUpdateSuccess();
+          this.adviceForm.reset();
         },
         error: (error) => {
+          console.log(error);
           this.notification.handleError('Failed to update advice data.', error);
         }
       });
     } else {
-      this.adviceService.create(formData)
+      this.adviceService.create(this.adviceForm.value)
       .subscribe({
         next: (response) => {
           this.advices.splice(this.advices.length, 0 , response);
           this.notification.onCreateSuccess();
+          this.adviceForm.reset();
         },
         error: (error) => {
+          console.log(error);
           this.notification.handleError('Failed to add advice information.', error);
         }
       });
     }
   }
 
-  editAdvice(adviceId: number) {
+  getAdvice(adviceId: number) {
     this.adviceService.get(adviceId)
     .subscribe({
       next: (response) => {
