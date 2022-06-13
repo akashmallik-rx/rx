@@ -36,6 +36,7 @@ import { Router } from '@angular/router';
 import * as Sentry from '@sentry/angular';
 import { BrowserTracing } from '@sentry/tracing';
 import { environment } from 'src/environments/environment';
+import { PageNotFoundComponent } from './components/common/page-not-found/page-not-found.component';
 
 Sentry.init({
   dsn: environment.sentrySecret,
@@ -62,6 +63,7 @@ Sentry.init({
     PatientComponent,
     CustomDatePipe,
     AlertComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
